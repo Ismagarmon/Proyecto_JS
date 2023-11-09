@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'Norwester';
+    src: url('../fonts/Norwester/norwester.ttf') format('truetype'),
+        url('../fonts/Norwester/norwester.otf') format('OpenType Font'),
+        url('../fonts/Norwester/norwester.woff') format('Web Open Font Format');
+}
+
+@font-face {
+    font-family: 'RubikR';
+    src: url('../fonts/Rubik/Rubik-Regular.ttf') format('truetype');
+}
+
+:host {
+    background-color: var(--black-variant);
+}
+
+:root {
+    --blue: #1A20B3;
+    --purple: #752877;
+    --white: #FFFFFF;
+    --black: #000000;
+    --black-variant: #252525;
+    --form: #CCCCCC;
+    --legend: #D9D9D9;
+    --validar: rgba(102, 204, 102, 1);
+    --nulo: rgba(204, 102, 102, 1);
+    --black-variant-2: #131313;
+    --primaryfont: 'Norwester';
+    --secondaryfont: 'RubikR'
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+
+.flex-sb {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.flex-cc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+html {
+    scroll-behavior: smooth;
+    min-height: 100vh;
+}
+
+body {
+    min-height: 100vh;
+}
+
