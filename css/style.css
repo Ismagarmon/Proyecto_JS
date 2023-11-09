@@ -38,6 +38,8 @@
     margin: 0px;
 }
 
+
+
 .flex-sb {
     display: flex;
     justify-content: space-evenly;
@@ -59,3 +61,88 @@ body {
     min-height: 100vh;
 }
 
+.inicio {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--black);
+}
+
+.inicio div {
+    color: var(--white);
+    font-family: var(--secondaryfont);
+    text-align: center;
+    overflow: auto;
+}
+
+.inicio div p {
+    font-size: larger;
+    margin-bottom: 30px;
+}
+
+.inicio div input {
+    outline: none;
+    background-color: var(--purple);
+    color: var(--white);
+    padding-left: 15px;
+    border-radius: 30px;
+    border: 1px solid var(--purple);
+    height: 3rem;
+    width: 70%;
+    font-family: var(--secondaryfont);
+}
+
+.ctn {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--black-variant);
+}
+
+.btn {
+    width: 30%;
+    height: 7rem;
+    background-color: var(--black);
+    color: var(--white);
+    outline: none;
+    border-radius: 40px;
+    font-family: var(--secondaryfont);
+    cursor: pointer;
+}
+
+.btn:active {
+    transform: translateY(5px);
+}
+
+.btn-p {
+    width: 70%;
+    height: 3rem;
+    background-color: var(--black);
+    color: var(--white);
+    outline: none;
+    border-radius: 40px;
+    font-family: var(--secondaryfont);
+    cursor: pointer;
+    margin: 0px auto;
+    margin-top: 20px;
+}
+
+p#Continuar {
+    margin-bottom: 0px;
+}
+
+.none {
+    display: none;
+}
+
+.musicplayer {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--black-variant-2);
+}
+
+.reproductor {
+    width: 50%;
+    height: 40rem;
+    border: 1px solid var(--white);
+    border-radius: 30px;
+    background-color: var(--black-variant);
+}
