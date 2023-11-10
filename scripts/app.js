@@ -98,5 +98,5 @@ class Reproductor {
         })
         .catch((error) => alert(`El error es: ${error}`))
     }
-    
+
 }

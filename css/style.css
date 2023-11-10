@@ -162,6 +162,7 @@ img#song_image {
     width: 40rem;
     height: 20rem;
     margin-top: 60px;
+    border-radius: 15px;
 }
 
 .botones {
