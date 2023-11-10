@@ -6,15 +6,15 @@ export const TOGGLE = {
     ENTER: 'Enter'
 }
 
-export async function getMusicList() {
-    const loadjson = await fetch('../json/MusicList.json')
+export const getMusicList = async function() {
+    const loadjson = await fetch('json/MusicList.json')
     const parsejson = await loadjson.json()
 
     return parsejson
 }
 
-export async function getCardList() {
-    const loadjson = await fetch('../json/CardList.json')
+export const getCardList = async function() {
+    const loadjson = await fetch('json/CardList.json')
     const parsejson = await loadjson.json()
 
     return parsejson

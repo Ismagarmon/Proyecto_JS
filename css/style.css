@@ -175,3 +175,16 @@ img#song_image {
 .botones svg {
     cursor: pointer;
 }
+
+.tiempo-music {
+    width: 100%;
+    height: 2rem;
+    position: absolute;
+    bottom: 8rem;
+}
+
+progress#progress {
+    height: 2rem;
+    background-color: var(--black);
+    width: 60%;
+}
