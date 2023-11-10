@@ -145,4 +145,32 @@ p#Continuar {
     border: 1px solid var(--white);
     border-radius: 30px;
     background-color: var(--black-variant);
+    position: relative;
+}
+
+p#titulo_song {
+    color: var(--white);
+    text-align: center;
+    margin: 30px auto;
+    font-family: var(--secondaryfont);
+    font-size: large;
+}
+
+img#song_image {
+    display: block;
+    margin: 0px auto;
+    width: 40rem;
+    height: 20rem;
+    margin-top: 60px;
+}
+
+.botones {
+    position: absolute;
+    width: 100%;
+    height: 4rem;
+    bottom: 20px;
+}
+
+.botones svg {
+    cursor: pointer;
 }

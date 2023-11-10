@@ -1,0 +1,28 @@
+{
+    "Music": [
+        {
+            "Id": 0,
+            "Titulo": "Initial D - Don't Go Baby",
+            "src_audio": "audio/ID_B.mp3",
+            "src_img": "https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280"
+        },
+        {
+            "Id": 1,
+            "Titulo": "Initial D - Spitfire",
+            "src_audio": "audio/ID_Spitfire.mp3",
+            "src_img": "https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280"
+        },
+        {
+            "Id": 2,
+            "Titulo": "Eminem - Not Afraid",
+            "src_audio": "audio/E_NA.mp3",
+            "src_img": "https://i.ytimg.com/vi/j5-yKhDd64s/maxresdefault.jpg"
+        },
+        {
+            "Id": 3,
+            "Titulo": "Adam Lambert - Runnin'",
+            "src_audio": "audio/R_AL.mp3",
+            "src_img": "https://i.ytimg.com/vi/M-YvkPtneYE/maxresdefault.jpg"
+        }
+    ]
+}
