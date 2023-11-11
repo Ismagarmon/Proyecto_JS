@@ -4,13 +4,10 @@ window.onload = () => {
     pprincipal()
     loadmusicplayer()
     Controls()
-
-    getMusicList()
-        .then((data) => {
-            //let cant = data.Music.length
-            console.log(data.Music)
-        }).catch((error) => alert(`El error es: ${error}`))
-
+    let p = document.getElementById('progress')
+    p.addEventListener('click', () => {
+        console.log(p.value)
+    })
 }
 
 let nombre = null;
@@ -81,6 +78,8 @@ function Controls() {
 class Reproductor {
 
     constructor() {
+        this.p = document.createElement('p')
+        this.p2 = document.createElement('p')
         this.barra_tiempo = document.getElementById('progress')
         this.p_titulo = document.getElementById('titulo_song')
         this.img = document.getElementById('song_image')
@@ -92,19 +91,33 @@ class Reproductor {
 
     play() {
         this.audio.play()
-        this.barra_tiempo.max = duracion
-        let p = document.createElement('p')
-        p.style.paddingLeft = '20px'
-        p.style.c
-        const minutos = Math.floor( this.audio.duration.toFixed(0) / 60);
-        const segundos = Math.floor(this.audio.duration.toFixed(0) % 60);
-        p.textContent = `${minutos} : ${segundos}`
+        this.p.style.cssText = `
+        color: white;
+        padding-left: 20px;
+        font-size: medium;
+        font-family: var(--secondaryfont)
+        `
+        const minutos = Math.floor(this.audio.duration.toFixed(0) / 60);
+        let segundos = Math.floor(this.audio.duration.toFixed(0) % 60);
+        if(segundos < 10){
+            segundos = '0'+Math.floor(this.audio.duration.toFixed(0) % 60);
+        }
+        this.p.textContent = `${minutos} : ${segundos}`
+
+        this.barra_tiempo.insertAdjacentElement('afterend', this.p)
+        this.p2.id = 'tiempoactual'
+        this.p2.style.cssText = `
+        color: white;
+        padding-right: 20px;
+        font-size: medium;
+        font-family: var(--secondaryfont)
+        `
+        if(this.audio.currentTime == 0){
+            this.p2.textContent = '0 : 0'
+        }
         
-        this.barra_tiempo.insertAdjacentElement('afterend', p)
-        let p2 = document.createElement('p')
-        p2.id = 'tiempoactual'
-        p2.style.paddingRight = '20px'
-        this.barra_tiempo.insertAdjacentElement('beforebegin', p2)
+        this.barra_tiempo.insertAdjacentElement('beforebegin', this.p2)
+        this.barra_tiempo.max = this.audio.duration
     }
 
     pause() {
@@ -132,19 +145,30 @@ class Reproductor {
             .then((data) => {
                 let cant = data.Music.length
                 let object = data.Music
-                console.log(cant)
                 let v = Math.floor(Math.random() * cant);
                 this.p_titulo.textContent = object[v].Titulo
                 this.img.src = object[v].src_img
                 this.audio.src = object[v].src_audio
+                this.barra_tiempo.value = 0
+                this.barra_tiempo.max = 100
+                this.p.textContent = ''
+                this.p2.textContent = ''
             })
             .catch((error) => alert(`El error es: ${error}`))
+        let svg_play = document.getElementById('play')
+        let svg_pause = document.getElementById('pause')
+
+        svg_pause.classList.add('none')
+        svg_play.classList.remove('none')
     }
 
     actualizartiemposegundos() {
         let p2 = document.getElementById('tiempoactual')
         const minutos = Math.floor(this.audio.currentTime / 60);
-        const segundos = Math.floor(this.audio.currentTime % 60);
+        let segundos = Math.floor(this.audio.currentTime % 60);
+        if(segundos < 10){
+            segundos = '0'+Math.floor(this.audio.currentTime % 60);
+        }
         p2.textContent = `${minutos} : ${segundos}`
     }
 
