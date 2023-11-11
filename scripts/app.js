@@ -4,10 +4,6 @@ window.onload = () => {
     pprincipal()
     loadmusicplayer()
     Controls()
-    let p = document.getElementById('progress')
-    p.addEventListener('click', () => {
-        console.log(p.value)
-    })
 }
 
 let nombre = null;
