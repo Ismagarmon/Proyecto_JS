@@ -51,6 +51,7 @@ function Controls() {
     let svg_adelante = document.getElementById('adelante')
     let svg_aleatorio = document.getElementById('aleatorio')
     let svg_refresh = document.getElementById('refresh')
+    let path = document.getElementById('aleatoriorellenar')
 
     svg_play.addEventListener('click', () => {
         reproductor.play()
@@ -67,14 +68,29 @@ function Controls() {
         svg_pause.classList.add('none')
     })
     svg_atras.addEventListener('click', () => {
-        reproductor.otracancion()
+        if(reproductor.Random){
+            reproductor.otracancionnoaleatoria()
+        }else {
+           reproductor.otracancion() 
+        }
+        
     })
     svg_adelante.addEventListener('click', () => {
-        reproductor.otracancion()
+        if(reproductor.Random){
+            reproductor.otracancionnoaleatoria()
+        }else {
+           reproductor.otracancion() 
+        }
     })
 
     svg_aleatorio.addEventListener('click', () => {
         reproductor.random()
+        
+        if(path.getAttribute('fill') == 'green'){
+            path.setAttribute('fill', 'white')
+        }else {
+            path.setAttribute('fill', 'green')
+        }
     })
 
     svg_refresh.addEventListener('click', () => {
