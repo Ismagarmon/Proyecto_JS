@@ -43,11 +43,14 @@ const loadmusicplayer = () => {
 
 function Controls() {
     const reproductor = new Reproductor()
+    reproductor.crearlista()
 
     let svg_play = document.getElementById('play')
     let svg_pause = document.getElementById('pause')
     let svg_atras = document.getElementById('atras')
     let svg_adelante = document.getElementById('adelante')
+    let svg_aleatorio = document.getElementById('aleatorio')
+    let svg_refresh = document.getElementById('refresh')
 
     svg_play.addEventListener('click', () => {
         reproductor.play()
@@ -69,9 +72,19 @@ function Controls() {
     svg_adelante.addEventListener('click', () => {
         reproductor.otracancion()
     })
+
+    svg_aleatorio.addEventListener('click', () => {
+        reproductor.random()
+    })
+
+    svg_refresh.addEventListener('click', () => {
+        reproductor.refrescarcancion()
+    })
 }
 
 class Reproductor {
+
+    Random = false
 
     constructor() {
         this.p = document.createElement('p')
@@ -95,8 +108,8 @@ class Reproductor {
         `
         const minutos = Math.floor(this.audio.duration.toFixed(0) / 60);
         let segundos = Math.floor(this.audio.duration.toFixed(0) % 60);
-        if(segundos < 10){
-            segundos = '0'+Math.floor(this.audio.duration.toFixed(0) % 60);
+        if (segundos < 10) {
+            segundos = '0' + Math.floor(this.audio.duration.toFixed(0) % 60);
         }
         this.p.textContent = `${minutos} : ${segundos}`
 
@@ -108,10 +121,10 @@ class Reproductor {
         font-size: medium;
         font-family: var(--secondaryfont)
         `
-        if(this.audio.currentTime == 0){
+        if (this.audio.currentTime == 0) {
             this.p2.textContent = '0 : 0'
         }
-        
+
         this.barra_tiempo.insertAdjacentElement('beforebegin', this.p2)
         this.barra_tiempo.max = this.audio.duration
     }
@@ -162,11 +175,71 @@ class Reproductor {
         let p2 = document.getElementById('tiempoactual')
         const minutos = Math.floor(this.audio.currentTime / 60);
         let segundos = Math.floor(this.audio.currentTime % 60);
-        if(segundos < 10){
-            segundos = '0'+Math.floor(this.audio.currentTime % 60);
+        if (segundos < 10) {
+            segundos = '0' + Math.floor(this.audio.currentTime % 60);
         }
         p2.textContent = `${minutos} : ${segundos}`
     }
 
-}
+    refrescarcancion() {
 
+    }
+
+    random() {
+        if (this.Random === true) {
+            this.Random = false
+        }
+        else {
+            this.Random = true
+        }
+
+    }
+
+    crearlista() {
+        let div = document.getElementById('iconos')
+        div.style.cssText = `
+        margin-bottom: 30px;
+        `
+
+
+        getMusicList().then(data => {
+            let listamusica = data.Music
+            listamusica.forEach(musica => {
+                let nuevo_div = document.createElement('div')
+                nuevo_div.id = 'lista'
+                nuevo_div.style.cssText = `
+                cursor: pointer;
+                color: var(--white);
+                text-align: center;
+                margin-bottom: 20px;
+                `
+                let p = document.createElement('p')
+                p.id = musica.Id
+                p.textContent = musica.Titulo
+                nuevo_div.append(p)
+                div.insertAdjacentElement('afterend', nuevo_div)
+
+            });
+        })
+    }
+
+    otracancionnoaleatoria(id) {
+        getMusicList()
+            .then((data) => {
+                let object = data.Music
+                this.p_titulo.textContent = object[v].Titulo
+                this.img.src = object[v].src_img
+                this.audio.src = object[v].src_audio
+                this.barra_tiempo.value = 0
+                this.barra_tiempo.max = 100
+                this.p.textContent = ''
+                this.p2.textContent = ''
+            })
+            .catch((error) => alert(`El error es: ${error}`))
+        let svg_play = document.getElementById('play')
+        let svg_pause = document.getElementById('pause')
+
+        svg_pause.classList.add('none')
+        svg_play.classList.remove('none')
+    }
+}
