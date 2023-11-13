@@ -69,9 +69,9 @@ function Controls() {
     })
     svg_atras.addEventListener('click', () => {
         if(reproductor.Random){
-            reproductor.otracancionnoaleatoria()
+            reproductor.otracancion()
         }else {
-           reproductor.otracancion() 
+            reproductor.otracancionnoaleatoria()
         }
         
     })
@@ -236,7 +236,7 @@ class Reproductor {
                 nuevo_div.append(p)
                 div.insertAdjacentElement('afterend', nuevo_div)
 
-            });
+            })
         })
     }
 
