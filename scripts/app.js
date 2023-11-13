@@ -62,11 +62,13 @@ function Controls() {
             reproductor.actualizartiemposegundos()
         }, 1000)
     })
+    
     svg_pause.addEventListener('click', () => {
         reproductor.pause()
         svg_play.classList.remove('none')
         svg_pause.classList.add('none')
     })
+
     svg_atras.addEventListener('click', () => {
         if(reproductor.Random){
             reproductor.otracancion()
@@ -75,6 +77,7 @@ function Controls() {
         }
         
     })
+
     svg_adelante.addEventListener('click', () => {
         if(reproductor.Random){
             reproductor.otracancionnoaleatoria()
