@@ -7,7 +7,6 @@
     <link rel="icon" type="image/jpg" href="img/favicon.png" />
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <script type="module" src="scripts/app.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Proyecto_JS</title>
 </head>
 
@@ -21,7 +20,19 @@
             </button>
         </div>
     </div>
-    <div class="musicplayer flex-cc" id="mp"> <!-- Aqui tengo que poner el none -->
+    <div class="musicplayer flex-sb" id="mp">
+        <div class="lista-reproductor">
+            <div class="icons flex-sb">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
+                    <path fill="white" d="M265.614 206.387H456V16h-32v133.887l-26.137-26.137c-79.539-79.539-208.96-79.54-288.5 0s-79.539 208.96 0 288.5a204.232 204.232 0 0 0 288.5 0l-22.627-22.627c-67.063 67.063-176.182 67.063-243.244 0s-67.063-176.183 0-243.246s176.182-67.063 243.245 0l28.01 28.01H265.614Z"/>
+                </svg>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 1024 1024">
+                    <path fill="white" d="m402.304 505.856l39.264-55.248l-134.304-183.28H2.736v64h271.488zm516.479-174.528l-77.536 69.535c-9.344 8.945-12.368 23.44-3.025 32.368l5.472 8.065c9.376 8.944 24.496 8.944 33.824 0l127.744-115.504c.176-.16.384-.193.544-.336l8.464-8.096c4.672-4.496 7.008-10.368 6.976-16.288c.032-5.872-2.304-11.776-6.976-16.224l-8.464-8.096c-.16-.16-.336-.225-.544-.368L875.534 157.952c-9.36-8.945-24.464-8.945-33.84 0l-5.471 8.064c-9.36 8.944-6.32 23.408 3.023 32.336l76.048 68.976h-231.76l-409.312 576H2.734v64h304.512l409.328-576zm87.027 521.44c-.16-.16-.337-.226-.545-.37l-129.728-118.43c-9.36-8.944-24.464-8.944-33.84 0l-5.471 8.064c-9.36 8.945-6.32 23.409 3.023 32.336l76.336 69.233l-199.008-.273L602.145 666.32l-39.28 55.248l120.656 185.76l234.944.288l-77.216 69.248c-9.344 8.945-12.368 23.44-3.025 32.368l5.472 8.065c9.376 8.944 24.496 8.944 33.824 0l127.744-115.504c.176-.16.384-.192.544-.336l8.464-8.096c4.672-4.496 7.008-10.368 6.976-16.288c.032-5.872-2.304-11.776-6.976-16.224z"/>
+                </svg>
+            </div>
+            
+        </div> <!-- Aqui tengo que poner el none -->
         <div class="reproductor">
             <p id="titulo_song">Título de la cancion</p>
             <img alt="imagen de la cancion" id="song_image">
