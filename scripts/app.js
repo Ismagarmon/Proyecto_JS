@@ -121,12 +121,13 @@ class Reproductor {
         font-size: medium;
         font-family: var(--secondaryfont)
         `
+
         if (this.audio.currentTime == 0) {
-            this.p2.textContent = '0 : 0'
+            this.p2.textContent = '0 : 00'
         }
 
         this.barra_tiempo.insertAdjacentElement('beforebegin', this.p2)
-        this.barra_tiempo.max = this.audio.duration
+        this.barra_tiempo.max = this.audio.duration.toFixed(0)
     }
 
     pause() {
@@ -201,7 +202,6 @@ class Reproductor {
         margin-bottom: 30px;
         `
 
-
         getMusicList().then(data => {
             let listamusica = data.Music
             listamusica.forEach(musica => {
@@ -212,6 +212,7 @@ class Reproductor {
                 color: var(--white);
                 text-align: center;
                 margin-bottom: 20px;
+                font-family: var(--secondaryfont);
                 `
                 let p = document.createElement('p')
                 p.id = musica.Id
@@ -227,9 +228,9 @@ class Reproductor {
         getMusicList()
             .then((data) => {
                 let object = data.Music
-                this.p_titulo.textContent = object[v].Titulo
-                this.img.src = object[v].src_img
-                this.audio.src = object[v].src_audio
+                this.p_titulo.textContent = object[id].Titulo
+                this.img.src = object[id].src_img
+                this.audio.src = object[id].src_audio
                 this.barra_tiempo.value = 0
                 this.barra_tiempo.max = 100
                 this.p.textContent = ''
