@@ -1,4 +1,4 @@
-import { TOGGLE, getCardList, getMusicList } from "./module.js";
+import { TOGGLE, getCardList, getMusicList, svgplaymusiclist } from "./module.js";
 
 window.onload = () => {
     pprincipal()
@@ -52,7 +52,6 @@ function Controls() {
     let svg_aleatorio = document.getElementById('aleatorio')
     let svg_refresh = document.getElementById('refresh')
     let path = document.getElementById('aleatoriorellenar')
-
     svg_play.addEventListener('click', () => {
         reproductor.play()
         svg_play.classList.add('none')
@@ -62,33 +61,28 @@ function Controls() {
             reproductor.actualizartiemposegundos()
         }, 1000)
     })
-    
     svg_pause.addEventListener('click', () => {
         reproductor.pause()
         svg_play.classList.remove('none')
         svg_pause.classList.add('none')
     })
-
     svg_atras.addEventListener('click', () => {
-        if(reproductor.Random){
+        if (reproductor.Random) {
             reproductor.otracancion()
-        }else {
+        } else {
             reproductor.otracancionnoaleatoria()
         }
-        
     })
-
     svg_adelante.addEventListener('click', () => {
-        if(reproductor.Random){
+        if (reproductor.Random) {
+            reproductor.otracancion()
+        } else {
             reproductor.otracancionnoaleatoria()
-        }else {
-           reproductor.otracancion() 
         }
     })
 
     svg_aleatorio.addEventListener('click', () => {
         reproductor.random()
-        
         if(path.getAttribute('fill') == 'green'){
             path.setAttribute('fill', 'white')
         }else {
@@ -140,7 +134,6 @@ class Reproductor {
         font-size: medium;
         font-family: var(--secondaryfont)
         `
-
         if (this.audio.currentTime == 0) {
             this.p2.textContent = '0 : 00'
         }
@@ -220,26 +213,27 @@ class Reproductor {
         div.style.cssText = `
         margin-bottom: 30px;
         `
-
         getMusicList().then(data => {
             let listamusica = data.Music
             listamusica.forEach(musica => {
                 let nuevo_div = document.createElement('div')
-                nuevo_div.id = 'lista'
+                nuevo_div.id = musica.Id
                 nuevo_div.style.cssText = `
                 cursor: pointer;
                 color: var(--white);
                 text-align: center;
                 margin-bottom: 20px;
-                font-family: var(--secondaryfont);
+                border-radius: 30px;
                 `
+
                 let p = document.createElement('p')
-                p.id = musica.Id
                 p.textContent = musica.Titulo
+                nuevo_div.classList.add('flex-sb')
+                p.insertAdjacentElement('afterend', svgplaymusiclist)
                 nuevo_div.append(p)
                 div.insertAdjacentElement('afterend', nuevo_div)
 
-            })
+            });
         })
     }
 
@@ -256,6 +250,7 @@ class Reproductor {
                 this.p2.textContent = ''
             })
             .catch((error) => alert(`El error es: ${error}`))
+
         let svg_play = document.getElementById('play')
         let svg_pause = document.getElementById('pause')
 
