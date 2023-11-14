@@ -83,9 +83,9 @@ function Controls() {
 
     svg_aleatorio.addEventListener('click', () => {
         reproductor.random()
-        if(path.getAttribute('fill') == 'green'){
+        if (path.getAttribute('fill') == 'green') {
             path.setAttribute('fill', 'white')
-        }else {
+        } else {
             path.setAttribute('fill', 'green')
         }
     })
@@ -98,6 +98,7 @@ function Controls() {
 class Reproductor {
 
     Random = false
+    Id = 0
 
     constructor() {
         this.p = document.createElement('p')
@@ -224,16 +225,21 @@ class Reproductor {
                 text-align: center;
                 margin-bottom: 20px;
                 border-radius: 30px;
+                font-family: var(--secondaryfont);
                 `
-
+                let span = document.createElement('span')
+                span.innerHTML = svgplaymusiclist
+                nuevo_div.insertAdjacentElement('beforeend',span)
+                nuevo_div.classList.add('flex-sb')
+                nuevo_div.addEventListener('click', () => {
+                    this.otracancionnoaleatoria(nuevo_div.id)
+                })
                 let p = document.createElement('p')
                 p.textContent = musica.Titulo
-                nuevo_div.classList.add('flex-sb')
-                p.insertAdjacentElement('afterend', svgplaymusiclist)
-                nuevo_div.append(p)
-                div.insertAdjacentElement('afterend', nuevo_div)
-
-            });
+                nuevo_div.insertAdjacentElement('afterbegin',p)
+                div.insertAdjacentElement('afterend',nuevo_div)
+                
+            })
         })
     }
 
@@ -256,5 +262,9 @@ class Reproductor {
 
         svg_pause.classList.add('none')
         svg_play.classList.remove('none')
+    }
+
+    cambiarid() {
+        
     }
 }
