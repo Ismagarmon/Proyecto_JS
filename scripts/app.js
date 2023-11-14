@@ -103,7 +103,7 @@ class Reproductor {
 
     Random = false
     Id = 0
-    cantSongs = getMusicList().then(data => {return data.Music.length})
+    cantSongs = 0
 
     constructor() {
         this.p = document.createElement('p')
