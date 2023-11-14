@@ -19,3 +19,5 @@ export const getCardList = async function() {
 
     return parsejson
 }
+
+export const svgplaymusiclist = ''
