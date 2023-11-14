@@ -4,6 +4,9 @@ window.onload = () => {
     pprincipal()
     loadmusicplayer()
     Controls()
+    getMusicList().then(data => {
+        console.log(data)
+    })
 }
 
 let nombre = null;
@@ -52,6 +55,7 @@ function Controls() {
     let svg_aleatorio = document.getElementById('aleatorio')
     let svg_refresh = document.getElementById('refresh')
     let path = document.getElementById('aleatoriorellenar')
+
     svg_play.addEventListener('click', () => {
         reproductor.play()
         svg_play.classList.add('none')
@@ -99,6 +103,7 @@ class Reproductor {
 
     Random = false
     Id = 0
+    cantSongs = getMusicList().then(data => {return data.Music.length})
 
     constructor() {
         this.p = document.createElement('p')
@@ -110,6 +115,8 @@ class Reproductor {
         this.img.src = "https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280"
         this.audio = new Audio('audio/ID_Spitfire.mp3')
         this.audio.volume = 0.6
+        this.Id = 1
+        console.log(this.cantSongs)
     }
 
     play() {
@@ -244,6 +251,7 @@ class Reproductor {
     }
 
     otracancionnoaleatoria(id) {
+        this.Id = id
         getMusicList()
             .then((data) => {
                 let object = data.Music
@@ -265,6 +273,10 @@ class Reproductor {
     }
 
     cambiarid() {
-        
+        getMusicList()
+            .then((data) => {
+                let cant = data.Music.length
+
+            })
     }
 }
