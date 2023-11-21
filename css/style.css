@@ -207,3 +207,13 @@ progress#progress {
 svg {
     cursor: pointer;
 }
+
+.volumen {
+    width: 10%;
+    height: 40rem;
+    border: 1px solid var(--white);
+    border-radius: 30px;
+    background-color: var(--black-variant);
+    position: relative;
+    display: inline-block;
+}

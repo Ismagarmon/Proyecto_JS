@@ -104,19 +104,29 @@ class Reproductor {
     Random = false
     Id = 0
     cantSongs = 0
+    p = document.createElement('p')
+    p2 = document.createElement('p')
+    barra_tiempo = document.getElementById('progress')
+    p_titulo = document.getElementById('titulo_song')
+    img = document.getElementById('song_image')
+    masv = document.querySelector('#mas')
+    menosv = document.querySelector('#menos')
 
     constructor() {
-        this.p = document.createElement('p')
-        this.p2 = document.createElement('p')
-        this.barra_tiempo = document.getElementById('progress')
-        this.p_titulo = document.getElementById('titulo_song')
-        this.img = document.getElementById('song_image')
         this.p_titulo.textContent = "Initial D - Spitfire"
         this.img.src = "https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280"
         this.audio = new Audio('audio/ID_Spitfire.mp3')
         this.audio.volume = 0.6
         this.Id = 1
         console.log(this.cantSongs)
+        this.masv.addEventListener('click',() => {
+            let volumen = document.getElementById('volumen')
+            this.cambiarvolumen(volumen.value)
+        })
+        this.menosvsv.addEventListener('click',() => {
+            let volumen = document.getElementById('volumen')
+            this.cambiarvolumen(volumen.value)
+        })
     }
 
     play() {
@@ -236,16 +246,17 @@ class Reproductor {
                 `
                 let span = document.createElement('span')
                 span.innerHTML = svgplaymusiclist
-                nuevo_div.insertAdjacentElement('beforeend',span)
+                nuevo_div.insertAdjacentElement('beforeend', span)
                 nuevo_div.classList.add('flex-sb')
                 nuevo_div.addEventListener('click', () => {
                     this.otracancionnoaleatoria(nuevo_div.id)
                 })
+
                 let p = document.createElement('p')
                 p.textContent = musica.Titulo
-                nuevo_div.insertAdjacentElement('afterbegin',p)
-                div.insertAdjacentElement('afterend',nuevo_div)
-                
+                nuevo_div.insertAdjacentElement('afterbegin', p)
+                div.insertAdjacentElement('afterend', nuevo_div)
+
             })
         })
     }
@@ -274,9 +285,14 @@ class Reproductor {
 
     cambiarid() {
         getMusicList()
-            .then((data) => {
-                let cant = data.Music.length
+        .then((data) => {
+            this.cantSongs = data.Music.length
+        })
 
-            })
+
+    }
+
+    cambiarvolumen(volumen) {
+        this.audio.volume = `0.${volumen}`
     }
 }
