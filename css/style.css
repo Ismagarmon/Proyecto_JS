@@ -38,7 +38,11 @@
     margin: 0px;
 }
 
-
+p {
+    font-family: var(--secondaryfont);
+    text-align: center;
+    color: var(--white);
+}
 
 .flex-sb {
     display: flex;
@@ -216,4 +220,42 @@ svg {
     background-color: var(--black-variant);
     position: relative;
     display: inline-block;
+    overflow-x: visible;
+}
+
+.subvolumen {
+    width: 20%;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all .4s;
+    margin: 20px auto;
+}
+
+.subvolumen:hover {
+    background-color: var(--black);
+}
+
+.bajvolumen {
+    width: 20%;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    bottom: 20px;
+    border-radius: 50px;
+    left: 40%;
+    transition: all .4s;
+}
+
+.bajvolumen:hover {
+    background-color: var(--black);
+}
+
+progress#volumen {
+    width: 240%;
+    height: 1rem;
+    background-color: var(--black);
+    border-radius: 20px;
+    border: none;
+    transform: translateX(-8.3rem) translateY(15rem) rotate(-90deg);
 }

@@ -111,22 +111,48 @@ class Reproductor {
     img = document.getElementById('song_image')
     masv = document.querySelector('#mas')
     menosv = document.querySelector('#menos')
+    volumen = document.getElementById('volumen')
+    pvolumen = document.getElementById('volumenmusic')
 
     constructor() {
+        this.p2.textContent = '0 : 00'
         this.p_titulo.textContent = "Initial D - Spitfire"
         this.img.src = "https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280"
         this.audio = new Audio('audio/ID_Spitfire.mp3')
-        this.audio.volume = 0.6
+        this.audio.volume = 0.5
+        this.volumen.value = this.audio.volume * 100
+        this.volumen.max = 100
         this.Id = 1
-        console.log(this.cantSongs)
-        this.masv.addEventListener('click',() => {
-            let volumen = document.getElementById('volumen')
-            this.cambiarvolumen(volumen.value)
+        this.pvolumen.textContent = this.audio.volume * 10
+        this.masv.addEventListener('click', () => {
+            let nuevo_volumen = this.volumen.value + 10
+            
+            if(nuevo_volumen >= 100){
+                this.volumen.value = 100
+                this.cambiarvolumen(1)
+                this.pvolumen.textContent = this.audio.volume * 10
+            }else {
+                this.volumen.value = nuevo_volumen
+                this.cambiarvolumen((nuevo_volumen/100).toFixed(1))
+                this.pvolumen.textContent = this.audio.volume * 10
+            }
+            
         })
-        this.menosvsv.addEventListener('click',() => {
-            let volumen = document.getElementById('volumen')
-            this.cambiarvolumen(volumen.value)
+        this.menosv.addEventListener('click', () => {
+            let nuevo_volumen = this.volumen.value - 10
+            
+            if(nuevo_volumen <= 0){
+                this.volumen.value = 0
+                this.cambiarvolumen(0)
+                this.pvolumen.textContent = this.audio.volume * 10
+            }else {
+                this.volumen.value = nuevo_volumen
+                this.cambiarvolumen((nuevo_volumen/100).toFixed(1))
+                this.pvolumen.textContent = this.audio.volume * 10
+            }
         })
+        
+        
     }
 
     play() {
@@ -285,14 +311,14 @@ class Reproductor {
 
     cambiarid() {
         getMusicList()
-        .then((data) => {
-            this.cantSongs = data.Music.length
-        })
+            .then((data) => {
+                this.cantSongs = data.Music.length
+            })
 
 
     }
 
     cambiarvolumen(volumen) {
-        this.audio.volume = `0.${volumen}`
+        this.audio.volume = volumen
     }
 }
