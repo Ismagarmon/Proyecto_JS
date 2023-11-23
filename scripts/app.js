@@ -207,10 +207,14 @@ class Reproductor {
             .then((data) => {
                 let cant = data.Music.length
                 let object = data.Music
-                let v = Math.floor(Math.random() * cant);
+                let v = Math.floor(Math.random() * cant)
+                while(this.Id === v || this.Id + 1 === v || this.Id - 1 === v){
+                    v = Math.floor(Math.random() * cant)
+                }
                 this.p_titulo.textContent = object[v].Titulo
                 this.img.src = object[v].src_img
                 this.audio.src = object[v].src_audio
+                this.Id = object[v].Id
                 this.barra_tiempo.value = 0
                 this.barra_tiempo.max = 100
                 this.p.textContent = ''
