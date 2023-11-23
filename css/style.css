@@ -259,3 +259,14 @@ progress#volumen {
     border: none;
     transform: translateX(-8.3rem) translateY(15rem) rotate(-90deg);
 }
+
+p#titulo {
+    position: absolute;
+    left: 3rem;
+}
+
+span#svg svg{
+    position: absolute;
+    right: 2rem;
+    cursor: default;
+}

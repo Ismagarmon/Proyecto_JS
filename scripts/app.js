@@ -1,15 +1,12 @@
-import { TOGGLE, getCardList, getMusicList, svgplaymusiclist } from "./module.js";
+import { TOGGLE, getCardList, getMusicList, svgplaymusiclist } from './module.js'
+
+let arraymusica = []
 
 window.onload = () => {
     pprincipal()
     loadmusicplayer()
     Controls()
-    getMusicList().then(data => {
-        console.log(data)
-    })
 }
-
-let nombre = null;
 
 const pprincipal = () => {
 
@@ -74,14 +71,14 @@ function Controls() {
         if (reproductor.Random) {
             reproductor.otracancion()
         } else {
-            reproductor.otracancionnoaleatoria()
+            reproductor.otracancionnoaleatoria(-1)
         }
     })
     svg_adelante.addEventListener('click', () => {
         if (reproductor.Random) {
             reproductor.otracancion()
         } else {
-            reproductor.otracancionnoaleatoria()
+            reproductor.otracancionnoaleatoria(1)
         }
     })
 
@@ -106,63 +103,62 @@ class Reproductor {
     cantSongs = 0
     p = document.createElement('p')
     p2 = document.createElement('p')
-    barra_tiempo = document.getElementById('progress')
-    p_titulo = document.getElementById('titulo_song')
-    img = document.getElementById('song_image')
+    barra_tiempo = document.querySelector('#progress')
+    p_titulo = document.querySelector('#titulo_song')
+    img = document.querySelector('#song_image')
     masv = document.querySelector('#mas')
     menosv = document.querySelector('#menos')
-    volumen = document.getElementById('volumen')
-    pvolumen = document.getElementById('volumenmusic')
+    volumen = document.querySelector('#volumen')
+    pvolumen = document.querySelector('#volumenmusic')
 
     constructor() {
         this.p2.textContent = '0 : 00'
-        this.p_titulo.textContent = "Initial D - Spitfire"
-        this.img.src = "https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280"
-        this.audio = new Audio('audio/ID_Spitfire.mp3')
+        this.p_titulo.textContent = "Initial D - Don't Go Baby"
+        this.img.src = 'https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280'
+        this.audio = new Audio('audio/ID_B.mp3')
         this.audio.volume = 0.5
         this.volumen.value = this.audio.volume * 100
         this.volumen.max = 100
-        this.Id = 1
+        this.Id = 0
         this.pvolumen.textContent = this.audio.volume * 10
+
         this.masv.addEventListener('click', () => {
             let nuevo_volumen = this.volumen.value + 10
-            
-            if(nuevo_volumen >= 100){
+            if (nuevo_volumen >= 100) {
                 this.volumen.value = 100
                 this.cambiarvolumen(1)
                 this.pvolumen.textContent = this.audio.volume * 10
-            }else {
+            } else {
                 this.volumen.value = nuevo_volumen
-                this.cambiarvolumen((nuevo_volumen/100).toFixed(1))
+                this.cambiarvolumen((nuevo_volumen / 100).toFixed(1))
                 this.pvolumen.textContent = this.audio.volume * 10
             }
-            
         })
+
         this.menosv.addEventListener('click', () => {
             let nuevo_volumen = this.volumen.value - 10
-            
-            if(nuevo_volumen <= 0){
+
+            if (nuevo_volumen <= 0) {
                 this.volumen.value = 0
                 this.cambiarvolumen(0)
                 this.pvolumen.textContent = this.audio.volume * 10
-            }else {
+            } else {
                 this.volumen.value = nuevo_volumen
-                this.cambiarvolumen((nuevo_volumen/100).toFixed(1))
+                this.cambiarvolumen((nuevo_volumen / 100).toFixed(1))
                 this.pvolumen.textContent = this.audio.volume * 10
             }
         })
-        
-        
+
     }
 
     play() {
         this.audio.play()
         this.p.style.cssText = `
-        color: white;
-        padding-left: 20px;
-        font-size: medium;
-        font-family: var(--secondaryfont)
-        `
+            color: white;
+            padding-left: 20px;
+            font-size: medium;
+            font-family: var(--secondaryfont)
+            `
         const minutos = Math.floor(this.audio.duration.toFixed(0) / 60);
         let segundos = Math.floor(this.audio.duration.toFixed(0) % 60);
         if (segundos < 10) {
@@ -173,11 +169,11 @@ class Reproductor {
         this.barra_tiempo.insertAdjacentElement('afterend', this.p)
         this.p2.id = 'tiempoactual'
         this.p2.style.cssText = `
-        color: white;
-        padding-right: 20px;
-        font-size: medium;
-        font-family: var(--secondaryfont)
-        `
+            color: white;
+            padding-right: 20px;
+            font-size: medium;
+            font-family: var(--secondaryfont)
+            `
         if (this.audio.currentTime == 0) {
             this.p2.textContent = '0 : 00'
         }
@@ -255,50 +251,66 @@ class Reproductor {
     crearlista() {
         let div = document.getElementById('iconos')
         div.style.cssText = `
-        margin-bottom: 30px;
+            margin-bottom: 30px;
         `
+
         getMusicList().then(data => {
+            let cant = data.Music.length
             let listamusica = data.Music
-            listamusica.forEach(musica => {
+            for (let i = cant - 1; i >= 0; i--) {
                 let nuevo_div = document.createElement('div')
-                nuevo_div.id = musica.Id
                 nuevo_div.style.cssText = `
-                cursor: pointer;
-                color: var(--white);
-                text-align: center;
-                margin-bottom: 20px;
-                border-radius: 30px;
-                font-family: var(--secondaryfont);
-                `
+                    color: var(--white);
+                    text-align: center;
+                    margin-bottom: 20px;
+                    border-radius: 30px;
+                    font-family: var(--secondaryfont);
+                    position: relative;
+                    height: 2rem;
+                    `
                 let span = document.createElement('span')
+                span.id = 'svg'
                 span.innerHTML = svgplaymusiclist
                 nuevo_div.insertAdjacentElement('beforeend', span)
-                nuevo_div.classList.add('flex-sb')
-                nuevo_div.addEventListener('click', () => {
-                    this.otracancionnoaleatoria(nuevo_div.id)
-                })
 
                 let p = document.createElement('p')
-                p.textContent = musica.Titulo
+                p.textContent = listamusica[i].Titulo
+                p.id = 'titulo'
                 nuevo_div.insertAdjacentElement('afterbegin', p)
                 div.insertAdjacentElement('afterend', nuevo_div)
-
-            })
+            }
         })
     }
 
-    otracancionnoaleatoria(id) {
-        this.Id = id
+    otracancionnoaleatoria(numero) {
+        let nextcancion = 0
         getMusicList()
             .then((data) => {
+                this.cantSongs = data.Music.length
                 let object = data.Music
-                this.p_titulo.textContent = object[id].Titulo
-                this.img.src = object[id].src_img
-                this.audio.src = object[id].src_audio
+                let objetorecibido = object.find(objectfound => objectfound.Id == this.Id)
+
+                nextcancion = objetorecibido.Id + numero
+
+                if (nextcancion >= this.cantSongs) {
+                    nextcancion = 0
+                }
+
+                if (nextcancion < 0) {
+                    nextcancion = data.Music.length - 1
+                }
+
+                this.Id = nextcancion
+
+                let objetorecibido_ejecutar = object.find(objectfound => objectfound.Id == nextcancion)
+
+                this.p_titulo.textContent = objetorecibido_ejecutar.Titulo
+                this.img.src = objetorecibido_ejecutar.src_img
+                this.audio.src = objetorecibido_ejecutar.src_audio
                 this.barra_tiempo.value = 0
                 this.barra_tiempo.max = 100
-                this.p.textContent = ''
-                this.p2.textContent = ''
+                this.p.textContent = '0 : 00'
+                this.p2.textContent = '0 : 00'
             })
             .catch((error) => alert(`El error es: ${error}`))
 
@@ -307,15 +319,6 @@ class Reproductor {
 
         svg_pause.classList.add('none')
         svg_play.classList.remove('none')
-    }
-
-    cambiarid() {
-        getMusicList()
-            .then((data) => {
-                this.cantSongs = data.Music.length
-            })
-
-
     }
 
     cambiarvolumen(volumen) {
