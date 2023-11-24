@@ -1,7 +1,5 @@
 import { TOGGLE, getCardList, getMusicList, svgplaymusiclist } from './module.js'
 
-let arraymusica = []
-
 window.onload = () => {
     pprincipal()
     loadmusicplayer()
