@@ -1,9 +1,10 @@
-import { TOGGLE, getCardList, getMusicList, svgplaymusiclist } from './module.js'
+import { imgcard, getCardList, getMusicList, svgplaymusiclist } from './module.js'
 
 window.onload = () => {
     pprincipal()
     loadmusicplayer()
     Controls()
+    pintarcartas()
 }
 
 const pprincipal = () => {
@@ -11,17 +12,28 @@ const pprincipal = () => {
     let input = document.getElementById('input-nombre')
     let div_p = document.getElementById('home')
     let btn = document.getElementById('btn-principal')
+    btn.style.display = 'none'
     let div_principal = document.getElementById('p-principal')
+    const regexpassword = /^(?=.*[A-Z]){1,}(?=.*[a-z]){1,}(?=.*[0-9]){1,}(?=.*[\W]){1,}/
 
-    btn.addEventListener('click', () => {
+    input.addEventListener('input', () => {
         if (input.value === '') {
-            alert('Introduce algo en el nombre')
+            btn.style.display = 'none'
         }
         else {
-            nombre = input.value
+            btn.style.display = 'block'
+        }
+    })
+
+    btn.addEventListener('click', () => {
+        if (!regexpassword.test(input.value)) {
+            swal('Info:', 'El nombre tiene que tener una mayúscula, una minúscula, un número y un símbolo como mínimo.', 'error')
+        }
+        else {
+            let nombre = input.value
             div_p.classList.add('none')
             div_principal.classList.remove('none')
-            document.cookie = `Nombre=${nombre}`
+            localStorage.setItem(`${nombre}`, JSON.stringify({ nombre: `${nombre}`, puntuacion: 0 }))
             input.value = ''
         }
     })
@@ -60,11 +72,13 @@ function Controls() {
             reproductor.actualizartiemposegundos()
         }, 1000)
     })
+
     svg_pause.addEventListener('click', () => {
         reproductor.pause()
         svg_play.classList.remove('none')
         svg_pause.classList.add('none')
     })
+
     svg_atras.addEventListener('click', () => {
         if (reproductor.Random) {
             reproductor.otracancion()
@@ -72,7 +86,8 @@ function Controls() {
             reproductor.otracancionnoaleatoria(-1)
         }
     })
-    svg_adelante.addEventListener('click', () => {
+
+    svg_adelante.addEventListener('click', function () {
         if (reproductor.Random) {
             reproductor.otracancion()
         } else {
@@ -96,6 +111,8 @@ function Controls() {
 
 class Reproductor {
 
+    audio = new Audio()
+    refresh = document.querySelector('#refresh')
     Random = false
     Id = 0
     cantSongs = 0
@@ -109,14 +126,13 @@ class Reproductor {
     volumen = document.querySelector('#volumen')
     pvolumen = document.querySelector('#volumenmusic')
 
+
     constructor() {
-        this.p2.textContent = '0 : 00'
         this.p_titulo.textContent = "Initial D - Don't Go Baby"
-        this.img.src = 'https://vmndims.binge.com.au/api/v2/img/5e704b06e4b0f4391761e2d6-1584417689045?location=tile&imwidth=1280'
-        this.audio = new Audio('audio/ID_B.mp3')
+        this.img.src = 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/aaee4e34242e3abc0af317edbada66aa.jpe'
+        this.audio.src = 'audio/ID_B.mp3'
         this.audio.volume = 0.5
         this.volumen.value = this.audio.volume * 100
-        this.volumen.max = 100
         this.Id = 0
         this.pvolumen.textContent = this.audio.volume * 10
 
@@ -147,36 +163,45 @@ class Reproductor {
             }
         })
 
-    }
-
-    play() {
-        this.audio.play()
+        this.p.textContent = '0 : 00'
         this.p.style.cssText = `
             color: white;
             padding-left: 20px;
             font-size: medium;
             font-family: var(--secondaryfont)
-            `
-        const minutos = Math.floor(this.audio.duration.toFixed(0) / 60);
-        let segundos = Math.floor(this.audio.duration.toFixed(0) % 60);
-        if (segundos < 10) {
-            segundos = '0' + Math.floor(this.audio.duration.toFixed(0) % 60);
-        }
-        this.p.textContent = `${minutos} : ${segundos}`
-
+        `
         this.barra_tiempo.insertAdjacentElement('afterend', this.p)
-        this.p2.id = 'tiempoactual'
+
+        this.p2.textContent = '0 : 00'
         this.p2.style.cssText = `
             color: white;
             padding-right: 20px;
             font-size: medium;
             font-family: var(--secondaryfont)
-            `
+        `
+        this.barra_tiempo.insertAdjacentElement('beforebegin', this.p2)
+    }
+
+    play() {
+        this.audio.play()
+
+        const minutos = Math.floor(this.audio.duration.toFixed(0) / 60)
+        let segundos = Math.floor(this.audio.duration.toFixed(0) % 60)
+        if (segundos < 10) {
+            segundos = '0' + Math.floor(this.audio.duration.toFixed(0) % 60)
+        }
+        this.p.textContent = `${minutos} : ${segundos}`
+
+        this.barra_tiempo.insertAdjacentElement('afterend', this.p)
+        this.p2.id = 'tiempoactual'
+
         if (this.audio.currentTime == 0) {
             this.p2.textContent = '0 : 00'
         }
 
+        this.p2.textContent = '0 : 00'
         this.barra_tiempo.insertAdjacentElement('beforebegin', this.p2)
+
         this.barra_tiempo.max = this.audio.duration.toFixed(0)
     }
 
@@ -192,11 +217,21 @@ class Reproductor {
         }
 
         if (this.audio.ended) {
+
             let svg_play = document.getElementById('play')
             let svg_pause = document.getElementById('pause')
 
             svg_pause.classList.add('none')
             svg_play.classList.remove('none')
+
+            const minutos = Math.floor(this.audio.duration.toFixed(0) / 60)
+            let segundos = Math.floor(this.audio.duration.toFixed(0) % 60)
+            if (segundos < 10) {
+                segundos = '0' + Math.floor(this.audio.duration.toFixed(0) % 60)
+            }
+            this.p.textContent = `${minutos} : ${segundos}`
+
+            this.barra_tiempo.value += 1
         }
     }
 
@@ -206,7 +241,7 @@ class Reproductor {
                 let cant = data.Music.length
                 let object = data.Music
                 let v = Math.floor(Math.random() * cant)
-                while(this.Id === v || this.Id + 1 === v || this.Id - 1 === v){
+                while (this.Id === v || this.Id + 1 === v || this.Id - 1 === v) {
                     v = Math.floor(Math.random() * cant)
                 }
                 this.p_titulo.textContent = object[v].Titulo
@@ -215,8 +250,9 @@ class Reproductor {
                 this.Id = object[v].Id
                 this.barra_tiempo.value = 0
                 this.barra_tiempo.max = 100
-                this.p.textContent = ''
-                this.p2.textContent = ''
+
+                this.p.textContent = '0 : 00'
+                this.p2.textContent = '0 : 00'
             })
             .catch((error) => alert(`El error es: ${error}`))
         let svg_play = document.getElementById('play')
@@ -228,16 +264,28 @@ class Reproductor {
 
     actualizartiemposegundos() {
         let p2 = document.getElementById('tiempoactual')
-        const minutos = Math.floor(this.audio.currentTime / 60);
-        let segundos = Math.floor(this.audio.currentTime % 60);
-        if (segundos < 10) {
-            segundos = '0' + Math.floor(this.audio.currentTime % 60);
+        const minutos = Math.floor(this.audio.currentTime / 60)
+        let segundos = Math.floor(this.audio.currentTime % 60)
+        if (segundos <= 10) {
+            segundos = '0' + Math.floor(this.audio.currentTime % 60)
         }
         p2.textContent = `${minutos} : ${segundos}`
     }
 
     refrescarcancion() {
+        this.refresh.addEventListener('click', () => {
+            let svg_play = document.getElementById('play')
+            let svg_pause = document.getElementById('pause')
 
+            svg_pause.classList.add('none')
+            svg_play.classList.remove('none')
+
+            this.p2.textContent = '0 : 00'
+            this.audio.currentTime = 0
+            this.audio.pause()
+
+            this.barra_tiempo.value = 0
+        })
     }
 
     random() {
@@ -290,7 +338,7 @@ class Reproductor {
             .then((data) => {
                 this.cantSongs = data.Music.length
                 let object = data.Music
-                let objetorecibido = object.find(objectfound => objectfound.Id == this.Id)
+                let objetorecibido = object.find(objectfound => objectfound.Id === this.Id)
 
                 nextcancion = objetorecibido.Id + numero
 
@@ -304,13 +352,14 @@ class Reproductor {
 
                 this.Id = nextcancion
 
-                let objetorecibido_ejecutar = object.find(objectfound => objectfound.Id == nextcancion)
+                let objetoencontrado = object.find(objectfound => objectfound.Id == nextcancion)
 
-                this.p_titulo.textContent = objetorecibido_ejecutar.Titulo
-                this.img.src = objetorecibido_ejecutar.src_img
-                this.audio.src = objetorecibido_ejecutar.src_audio
+                this.p_titulo.textContent = objetoencontrado.Titulo
+                this.img.src = objetoencontrado.src_img
+                this.audio.src = objetoencontrado.src_audio
                 this.barra_tiempo.value = 0
                 this.barra_tiempo.max = 100
+
                 this.p.textContent = '0 : 00'
                 this.p2.textContent = '0 : 00'
             })
@@ -327,3 +376,52 @@ class Reproductor {
         this.audio.volume = volumen
     }
 }
+
+const gamecard = () => {
+
+}
+
+const pintarcartas = () => {
+    getCardList().then(json => {
+        let tablero = document.querySelector('#tablerogrid')
+        let cant = json.Cartas.length
+
+        let array = [0, 1, 2, 3, 4, 5, 6]
+        array = array.sort(function () { return Math.random() - 0.5 })
+        
+        array.forEach(number => {
+            let div = document.createElement('div')
+            div.classList.add('flex-cc')
+            div.style.backgroundColor = 'var(--white)'
+
+            div.innerHTML = imgcard(json.Cartas[i].src)
+            div.style.border = '5px solid var(--purple)'
+            div.style.width = '13.7rem'
+            div.style.height = '17rem'
+            div.style.cursor = 'pointer'
+            div.id = json.Cartas[i].Id
+
+            tablero.append(div)
+        })
+
+        let array_segundo = [0, 1, 2, 3, 4, 5, 6]
+        array_segundo = array_segundo.sort(function () { return Math.random() - 0.5 })
+        for (let i = 0; i < cant; i++) {
+            let div = document.createElement('div')
+            div.classList.add('flex-cc')
+            div.style.backgroundColor = 'var(--white)'
+
+            div.innerHTML = imgcard(json.Cartas[i].src)
+            div.style.border = '5px solid var(--purple)'
+            div.style.width = '13.7rem'
+            div.style.height = '17rem'
+            div.style.cursor = 'pointer'
+            div.id = json.Cartas[i].Id
+
+            tablero.append(div)
+        }
+
+    })
+
+}
+

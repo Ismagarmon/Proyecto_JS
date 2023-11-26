@@ -2,18 +2,30 @@
     "Cartas" : [
         {
             "Id": 0,
-            "src": "",
-            "witdh": "7%",
-            "height": "10rem"
+            "src": "img/Brujula.png"
         },
         {
-
+            "Id": 1,
+            "src": "img/Cruz_Celta.png"
         },
         {
-
+            "Id": 2,
+            "src": "img/Cuernos.png"
         },
         {
-
+            "Id": 3,
+            "src": "img/Cuervo.png"
+        },
+        {
+            "Id": 4,
+            "src": "img/Dragon.png"
+        },
+        {
+            "Id": 5,
+            "src": "img/Lobos.png"
+        },{
+            "Id": 6,
+            "src": "img/Triangulos.png"
         }
     ]
 }

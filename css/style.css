@@ -10,10 +10,6 @@
     src: url('../fonts/Rubik/Rubik-Regular.ttf') format('truetype');
 }
 
-:host {
-    background-color: var(--black-variant);
-}
-
 :root {
     --blue: #1A20B3;
     --purple: #752877;
@@ -35,34 +31,46 @@
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     padding: 0px;
-    margin: 0px;
+    margin: 0px
 }
 
 p {
     font-family: var(--secondaryfont);
     text-align: center;
-    color: var(--white);
+    color: var(--white)
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: [uno] 13.7rem [dos] 13.7rem [tres] 13.7rem [cuatro] 13.7rem [cinco] 13.7rem [seis] 13.7rem [siete];
+    grid-template-rows: [uno] 17rem [dos] 17rem [tres];
+    gap: 1rem;
+    grid-template-areas: 
+    "card1 card2 card3 card4 card5 card6 card7"
+    "card8 card9 card10 card11 card12 card13 card14"
+    ;
+    
 }
 
 .flex-sb {
     display: flex;
     justify-content: space-evenly;
-    align-items: center;
+    align-items: center
 }
 
 .flex-cc {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center
 }
 
 html {
     scroll-behavior: smooth;
-    min-height: 100vh;
 }
 
 body {
     min-height: 100vh;
+    min-height: 100svh;
 }
 
 .inicio {
@@ -97,7 +105,8 @@ body {
 
 .ctn {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
     background-color: var(--black-variant);
 }
 
@@ -147,7 +156,8 @@ p#Continuar {
 
 .musicplayer {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
     background-color: var(--black-variant-2);
 }
 
@@ -265,9 +275,82 @@ p#titulo {
     left: 3rem;
 }
 
-span#svg svg{
+span#svg svg {
     position: absolute;
     right: 2rem;
     bottom: 0.4rem;
     cursor: default;
+}
+
+.gamecard {
+    background-color: var(--black-variant);
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+}
+
+.zonatablero {
+    width: 100%;
+    height: 40rem;
+    border: 1px solid var(--purple);
+    margin-bottom: 2rem;
+}
+
+.timer {
+    width: 10%;
+    height: 35rem;
+}
+
+.timer p {
+    text-align: center;
+}
+
+.tablero {
+    width: 85%;
+    height: 35rem;
+    border: 1px solid var(--purple);
+}
+
+.btn-game {
+    width: 15%;
+    height: 3rem;
+}
+
+button {
+    width: 100%;
+    height: 100%;
+    background-color: var(--purple);
+    font-family: var(--secondaryfont);
+    border: none;
+    border-radius: 5px;
+    color: var(--white);
+    font-size: large;
+    cursor: pointer;
+}
+
+button:active {
+    transform: translateY(4px);
+}
+
+.text {
+    width: 10%;
+    height: 5rem;
+    text-align: left;
+}
+
+.btntext {
+    width: 100%;
+    height: 10rem;
+}
+
+.text p {
+    display: inline-block;
+    margin-right: 20px;
+    margin-top: 15px;
+}
+
+.text span {
+    display: inline-block;
+    color: var(--white);
+    font-family: var(--secondaryfont);
 }
