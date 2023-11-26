@@ -377,51 +377,89 @@ class Reproductor {
     }
 }
 
-const gamecard = () => {
-
-}
-
 const pintarcartas = () => {
     getCardList().then(json => {
         let tablero = document.querySelector('#tablerogrid')
-        let cant = json.Cartas.length
 
         let array = [0, 1, 2, 3, 4, 5, 6]
         array = array.sort(function () { return Math.random() - 0.5 })
-        
-        array.forEach(number => {
-            let div = document.createElement('div')
-            div.classList.add('flex-cc')
-            div.style.backgroundColor = 'var(--white)'
-
-            div.innerHTML = imgcard(json.Cartas[i].src)
-            div.style.border = '5px solid var(--purple)'
-            div.style.width = '13.7rem'
-            div.style.height = '17rem'
-            div.style.cursor = 'pointer'
-            div.id = json.Cartas[i].Id
-
-            tablero.append(div)
-        })
+        generarcartas(array, json, tablero)
 
         let array_segundo = [0, 1, 2, 3, 4, 5, 6]
         array_segundo = array_segundo.sort(function () { return Math.random() - 0.5 })
-        for (let i = 0; i < cant; i++) {
-            let div = document.createElement('div')
-            div.classList.add('flex-cc')
-            div.style.backgroundColor = 'var(--white)'
+        generarcartas(array_segundo, json, tablero)
 
-            div.innerHTML = imgcard(json.Cartas[i].src)
-            div.style.border = '5px solid var(--purple)'
-            div.style.width = '13.7rem'
-            div.style.height = '17rem'
-            div.style.cursor = 'pointer'
-            div.id = json.Cartas[i].Id
 
-            tablero.append(div)
-        }
 
     })
-
 }
 
+let array_cartas = []
+
+function generarcartas(array, json, tablero) {
+
+    array.forEach(number => {
+
+        let div = document.createElement('div')
+        div.classList.add('flex-cc')
+        div.style.backgroundColor = 'var(--white)'
+
+
+        div.style.border = '5px solid var(--purple)'
+        div.style.width = '13.7rem'
+        div.style.height = '17rem'
+        div.classList.add('cursor_pointer')
+        div.id = json.Cartas[number].Id
+        div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
+
+        tablero.append(div)
+    })
+
+    empezarjuego(json)
+}
+
+function empezarjuego(json) {
+    let tablero = document.querySelector('#tablerogrid')
+    let divs = tablero.querySelectorAll('div')
+    setTimeout(() => {
+        divs.forEach(div => {
+            div.classList.add('rotate')
+            div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
+
+            div.addEventListener('click', () => {
+                array_cartas.push(parseInt(div.id))
+                console.log(array_cartas)
+                comprobar(div)
+                div.classList.remove('rotate')
+                div.classList.add('rotate-reverse')
+                div.innerHTML = ''
+                setTimeout(() => {
+                    div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
+                },200)
+                
+            })
+        })
+    }, 4000)
+}
+
+function comprobar(div) {
+
+    if (array_cartas.length == 2 && array_cartas[0] == array_cartas[1]) {
+        let divocultar = document.querySelectorAll(`div[id="${array_cartas[0]}"]`)
+        divocultar.forEach(div => {
+            div.classList.add('drop')
+            div.classList.remove('cursor_pointer')
+            div.classList.add('cursor_default')
+        })
+
+        array_cartas = []
+    }
+    else if(array_cartas.length == 2 && array_cartas[0] != array_cartas[1]) {
+        div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
+        div.classList.remove('rotate-reverse')
+        div.classList.add('rotate')
+        
+
+        array_cartas = []
+    }
+}
