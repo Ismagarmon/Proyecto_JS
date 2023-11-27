@@ -96,6 +96,7 @@ function Controls() {
         svg_play.classList.add('none')
         svg_pause.classList.remove('none')
 
+        //Aquí añado el intervalo para actualizar el tiempo real y si la canción ha terminado
         setInterval(() => {
             reproductor.actualizartiempo()
             reproductor.actualizartiemposegundos()
@@ -300,6 +301,7 @@ class ReproductorMusica extends Contador {
 
         if (this.audio.currentTime > 0) {
             let progreso = this.audio.currentTime
+            //Hago esto para que no me saque decimales
             let tiempo = Math.floor(progreso)
             this.barra_tiempo.value = tiempo
         }
@@ -313,6 +315,7 @@ class ReproductorMusica extends Contador {
             svg_pause.classList.add('none')
             svg_play.classList.remove('none')
 
+            //Aquí vuelvo a utilizar toFixex porque no quiero numeros decimales
             const minutos = Math.floor(this.audio.duration.toFixed(0) / 60)
             let segundos = Math.floor(this.audio.duration.toFixed(0) % 60)
             if (segundos < 10) {
