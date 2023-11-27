@@ -302,6 +302,7 @@ span#svg svg {
 .timer {
     width: 10%;
     height: 35rem;
+    text-align: center;
 }
 
 .timer p {
@@ -358,19 +359,6 @@ button:active {
     font-family: var(--secondaryfont);
 }
 
-.drop {
-    animation: opacity .5s forwards;
-}
-
-@keyframes opacity {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
-}
-
 .rotate {
     animation: rotate .5s forwards;
 }
@@ -404,4 +392,29 @@ button:active {
 
 .cursor_pointer {
     cursor: pointer;
+}
+
+.background_nula {
+    background-color: var(--blue);
+}
+
+.drop {
+    animation: opacity .5s forwards;
+}
+
+@keyframes opacity {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.no_seleccionado {
+    border: 5px solid var(--purple)
+}
+
+.seleccionado {
+    border: 5px solid var(--blue)
 }

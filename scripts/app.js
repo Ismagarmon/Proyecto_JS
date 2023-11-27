@@ -1,10 +1,10 @@
-import { imgcard, getCardList, getMusicList, svgplaymusiclist } from './module.js'
+import { imgcard, getCardList, getMusicList, svgplaymusiclist, Contador } from './module.js'
 
 window.onload = () => {
     pprincipal()
     loadmusicplayer()
     Controls()
-    pintarcartas()
+    NewGame()
 }
 
 const pprincipal = () => {
@@ -33,7 +33,8 @@ const pprincipal = () => {
             let nombre = input.value
             div_p.classList.add('none')
             div_principal.classList.remove('none')
-            localStorage.setItem(`${nombre}`, JSON.stringify({ nombre: `${nombre}`, puntuacion: 0 }))
+            localStorage.setItem('puntuacion', JSON.stringify({ nombre: `${nombre}`, puntuacion: 0 }))
+            document.cookie = `Nombre=${nombre}`
             input.value = ''
         }
     })
@@ -52,7 +53,7 @@ const loadmusicplayer = () => {
 }
 
 function Controls() {
-    const reproductor = new Reproductor()
+    const reproductor = new ReproductorMusica()
     reproductor.crearlista()
 
     let svg_play = document.getElementById('play')
@@ -109,7 +110,18 @@ function Controls() {
     })
 }
 
-class Reproductor {
+function NewGame() {
+    const cardgame = new CardGame()
+
+    let buttonstart = document.querySelector('#playbutton')
+
+    buttonstart.addEventListener('click', function () {
+        cardgame.Play()
+        buttonstart.textContent = 'Jugar de nuevo'
+    })
+}
+
+class ReproductorMusica extends Contador {
 
     audio = new Audio()
     refresh = document.querySelector('#refresh')
@@ -126,8 +138,12 @@ class Reproductor {
     volumen = document.querySelector('#volumen')
     pvolumen = document.querySelector('#volumenmusic')
 
+    get getID() {
+        return this.Id
+    }
 
     constructor() {
+        super()
         this.p_titulo.textContent = "Initial D - Don't Go Baby"
         this.img.src = 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/aaee4e34242e3abc0af317edbada66aa.jpe'
         this.audio.src = 'audio/ID_B.mp3'
@@ -377,89 +393,226 @@ class Reproductor {
     }
 }
 
-const pintarcartas = () => {
-    getCardList().then(json => {
-        let tablero = document.querySelector('#tablerogrid')
+class CardGame extends Contador {
 
-        let array = [0, 1, 2, 3, 4, 5, 6]
-        array = array.sort(function () { return Math.random() - 0.5 })
-        generarcartas(array, json, tablero)
+    array_cartas = []
+    tablero = document.querySelector('#tablerogrid')
+    cartas_acertadas = 0
+    btnplay = document.getElementById('playbutton')
+    timer = document.getElementById('ttranscurrido')
+    pttiempo = document.getElementById('ttranscurridop')
+    span_puntuacion = document.getElementById('puntuacion')
+    span_mj = document.getElementById('mj')
+    puntuacion = 0
+    cant_segundos = 150
+    intervalo_tiempo = null
 
-        let array_segundo = [0, 1, 2, 3, 4, 5, 6]
-        array_segundo = array_segundo.sort(function () { return Math.random() - 0.5 })
-        generarcartas(array_segundo, json, tablero)
-
-
-
-    })
-}
-
-let array_cartas = []
-
-function generarcartas(array, json, tablero) {
-
-    array.forEach(number => {
-
-        let div = document.createElement('div')
-        div.classList.add('flex-cc')
-        div.style.backgroundColor = 'var(--white)'
-
-
-        div.style.border = '5px solid var(--purple)'
-        div.style.width = '13.7rem'
-        div.style.height = '17rem'
-        div.classList.add('cursor_pointer')
-        div.id = json.Cartas[number].Id
-        div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
-
-        tablero.append(div)
-    })
-
-    empezarjuego(json)
-}
-
-function empezarjuego(json) {
-    let tablero = document.querySelector('#tablerogrid')
-    let divs = tablero.querySelectorAll('div')
-    setTimeout(() => {
-        divs.forEach(div => {
-            div.classList.add('rotate')
-            div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
-
-            div.addEventListener('click', () => {
-                array_cartas.push(parseInt(div.id))
-                console.log(array_cartas)
-                comprobar(div)
-                div.classList.remove('rotate')
-                div.classList.add('rotate-reverse')
-                div.innerHTML = ''
-                setTimeout(() => {
-                    div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
-                },200)
-                
-            })
-        })
-    }, 4000)
-}
-
-function comprobar(div) {
-
-    if (array_cartas.length == 2 && array_cartas[0] == array_cartas[1]) {
-        let divocultar = document.querySelectorAll(`div[id="${array_cartas[0]}"]`)
-        divocultar.forEach(div => {
-            div.classList.add('drop')
-            div.classList.remove('cursor_pointer')
-            div.classList.add('cursor_default')
-        })
-
-        array_cartas = []
-    }
-    else if(array_cartas.length == 2 && array_cartas[0] != array_cartas[1]) {
-        div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
-        div.classList.remove('rotate-reverse')
-        div.classList.add('rotate')
+    constructor() {
+        super()
+        this.pttiempo.style.paddingBottom = '1rem'
+        this.timer.style.color = 'var(--white)'
+        this.timer.style.fontFamily = 'var(--secondaryfont)'
+        this.timer.style.fontSize = 'large'
         
-
-        array_cartas = []
     }
+
+    pintarcartas() {
+
+        this.StartTimer()
+
+        getCardList().then(json => {
+
+            let array_primero = [0, 1, 2, 3, 4, 5, 6]
+            array_primero = array_primero.sort(function () { return Math.random() - 0.5 })
+
+            let array_segundo = [0, 1, 2, 3, 4, 5, 6]
+            array_segundo = array_segundo.sort(function () { return Math.random() - 0.5 })
+
+
+            this.generarcartas(array_primero, array_segundo, json)
+
+        })
+    }
+
+    generarcartas(array_primero, array_segundo, json) {
+
+        array_primero.forEach(number => {
+
+            let div = document.createElement('div')
+            div.classList.add('flex-cc')
+            div.style.backgroundColor = 'var(--white)'
+
+            div.classList.add('no_seleccionado')
+            div.style.width = '13.7rem'
+            div.style.height = '17rem'
+            div.classList.add('cursor_pointer')
+            div.id = json.Cartas[number].Id
+            div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
+
+            this.tablero.append(div)
+        })
+
+        array_segundo.forEach(number => {
+
+            let div = document.createElement('div')
+            div.classList.add('flex-cc')
+            div.style.backgroundColor = 'var(--white)'
+
+            div.classList.add('no_seleccionado')
+            div.style.width = '13.7rem'
+            div.style.height = '17rem'
+            div.classList.add('cursor_pointer')
+            div.id = json.Cartas[number].Id
+            div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
+
+            this.tablero.append(div)
+        })
+
+        this.empezarjuego(json)
+    }
+
+
+    empezarjuego(json) {
+
+        let divs = this.tablero.querySelectorAll('div')
+
+        setTimeout(() => {
+            divs.forEach(div => {
+                div.classList.add('rotate')
+                div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
+                let img = div.querySelector('img')
+                img.classList.add('rotate')
+
+                div.addEventListener('click', () => this.Voltear(div, json))
+            })
+        }, 4000)
+    }
+
+    Voltear(div, json) {
+        this.array_cartas.push(parseInt(div.id))
+
+        div.classList.remove('no_seleccionado')
+        div.classList.add('seleccionado')
+        div.classList.remove('rotate')
+        div.classList.add('rotate-reverse')
+
+        setTimeout(() => {
+            div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
+        }, 200)
+
+        this.comprobar()
+    }
+
+    comprobar() {
+
+        if (this.array_cartas.length == 2 && this.array_cartas[0] === this.array_cartas[1]) {
+            let divocultar = document.querySelectorAll(`div[id="${this.array_cartas[0]}"]`)
+
+            divocultar.forEach(div => {
+
+                div.classList.remove('cursor_pointer')
+                div.classList.add('cursor_default')
+
+                setTimeout(() => {
+                    div.classList.add('drop')
+                    div.removeEventListener('click', () => this.Voltear())
+                }, 500)
+            })
+
+            this.array_cartas = []
+            this.cartas_acertadas++
+            if (this.cartas_acertadas === 7) {
+                this.Ganar()
+            }
+        }
+        else if (this.array_cartas.length == 2 && this.array_cartas[0] !== this.array_cartas[1]) {
+
+            this.ResetearCartas(this.array_cartas)
+            this.array_cartas = []
+        }
+    }
+
+    ResetearCartas(array_cartas) {
+        array_cartas.forEach(id => {
+            let divocultar = document.querySelectorAll(`div[id="${id}"]`)
+
+            setTimeout(() => {
+                divocultar.forEach(div => {
+                    if (div.classList.contains('seleccionado')) {
+                        div.classList.remove('seleccionado')
+                        div.classList.add('no_seleccionado')
+                        div.classList.remove('rotate-reverse')
+                        div.classList.add('rotate')
+                        div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
+                        let img = div.querySelector('img')
+                        img.classList.add('rotate')
+                    }
+                })
+            }, 500)
+        })
+    }
+
+    Ganar() {
+        this.tablero.classList.add('none')
+        let p = document.createElement('p')
+        p.textContent = '¡Has ganado,enhorabuena!'
+        p.style.fontSize = '3rem'
+        p.style.fontFamily = 'var(--secondaryfont)'
+
+        let div_tablero = document.getElementById('zonatablero')
+        div_tablero.insertAdjacentElement('afterbegin',p)
+
+        this.intervalo_tiempo = clearInterval()
+
+        setTimeout(() => {
+            this.puntuacion = this.cant_segundos * 30
+            this.span_puntuacion = this.puntuacion
+
+            let jsonEnLocalStorage = localStorage.getItem("puntuacion")
+            let json = JSON.parse(jsonEnLocalStorage)
+
+            if(this.puntuacion > this.span_mj.textContent){
+                this.span_mj.textContent = this.puntuacion
+                swal('','¡Has obtenido record personal!','success')
+
+            }
+            json.puntuacion = this.puntuacion
+            localStorage.setItem("puntuacion", JSON.stringify(json));
+
+        }, 400)
+
+
+    }
+
+    StartTimer() {
+        this.intervalo_tiempo = setInterval(() => {
+            this.timer.textContent = this.Timer()
+
+            this.pttiempo.insertAdjacentElement('afterend', this.timer)
+            this.cant_segundos--
+            if(this.cant_segundos === 0){
+                this.Perder()
+            }
+
+        }, 1000)
+    }
+
+    Perder() {
+        this.tablero.classList.add('none')
+        let p = document.createElement('p')
+        p.textContent = '¡Has perdido,buen intento!'
+        p.style.fontSize = '3rem'
+        p.style.fontFamily = 'var(--secondaryfont)'
+
+        let div_tablero = document.getElementById('zonatablero')
+
+        div_tablero.insertAdjacentElement('afterbegin',p)
+        this.intervalo_tiempo = clearInterval()
+
+    }
+
+    Play() {
+        
+    }
+
 }

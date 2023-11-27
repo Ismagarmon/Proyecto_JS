@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/jpg" href="img/unnamed.png" />
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <script type="module" src="scripts/app.js"></script>
     <title>Proyecto_JS</title>
@@ -314,18 +314,18 @@
         </div>
     </div>
     <div class="gamecard" id="gc"> <!-- Aqui tengo que poner el none -->
-        <div class="zonatablero flex-sb">
+        <div class="zonatablero flex-sb" id="zonatablero">
             <div class="tablero grid" id="tablerogrid">
 
             </div>
             <div class="timer">
-                <p>Tiempo transcurrido</p>
+                <p id="ttranscurridop">Tiempo transcurrido</p>
                 <span id="ttranscurrido"></span>
             </div>
         </div>
         <div class="flex-sb btntext">
             <div class="btn-game" id="play">
-                <button id="playbutton">Jugar de nuevo</button>
+                <button id="playbutton">Jugar</button>
             </div>
             <div class="text">
                 <p>Mejor puntuación: </p><span id="mj">0</span>
