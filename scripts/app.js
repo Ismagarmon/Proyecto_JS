@@ -37,17 +37,17 @@ const loadmenu = () => {
         div_mp.classList.remove('none')
     })
 
-    button_juego.addEventListener('click',() => {
+    button_juego.addEventListener('click', () => {
         div_p.classList.add('none')
         div_gc.classList.remove('none')
     })
 
-    div_m_mp.addEventListener('click',() => {
+    div_m_mp.addEventListener('click', () => {
         div_p.classList.remove('none')
         div_mp.classList.add('none')
     })
 
-    div_m_gc.addEventListener('click',() => {
+    div_m_gc.addEventListener('click', () => {
         div_p.classList.remove('none')
         div_gc.classList.add('none')
     })
@@ -411,7 +411,7 @@ class CardGame extends Contador {
     constructor() {
         super()
         this.estilarTimer()
-        localStorage.setItem("puntos", JSON.stringify({nombreusuario: getCookie('Nombre'), puntos: 0}))
+        localStorage.setItem("puntos", JSON.stringify({ nombreusuario: getCookie('Nombre'), puntos: 0 }))
     }
 
     pintarcartas() {
@@ -432,7 +432,7 @@ class CardGame extends Contador {
         })
     }
 
-    estilarTimer(){
+    estilarTimer() {
         this.pttiempo.style.paddingBottom = '1rem'
         this.timer.style.color = 'var(--white)'
         this.timer.style.fontFamily = 'var(--secondaryfont)'
@@ -442,6 +442,7 @@ class CardGame extends Contador {
     generarcartas(array_primero, array_segundo, json) {
 
         array_primero.forEach(number => {
+
 
             let div = document.createElement('div')
             div.classList.add('flex-cc')
@@ -542,8 +543,10 @@ class CardGame extends Contador {
             let divocultar = document.querySelectorAll(`div[id="${id}"]`)
 
             setTimeout(() => {
+
                 divocultar.forEach(div => {
                     if (div.classList.contains('seleccionado')) {
+
                         div.classList.remove('seleccionado')
                         div.classList.add('no_seleccionado')
                         div.classList.remove('rotate-reverse')
@@ -553,6 +556,7 @@ class CardGame extends Contador {
                         img.classList.add('rotate')
                     }
                 })
+
             }, 500)
         })
     }
@@ -621,7 +625,7 @@ class CardGame extends Contador {
 
     Play() {
         this.tablero.innerHTML = ''
-        
+
         clearInterval(this.intervalo_tiempo)
         this.segundos = 0
         this.minutos = 0
