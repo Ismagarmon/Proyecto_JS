@@ -1,0 +1,98 @@
+@font-face {
+    font-family: 'Norwester';
+    src: url('../fonts/Norwester/norwester.ttf') format('truetype'),
+        url('../fonts/Norwester/norwester.otf') format('OpenType Font'),
+        url('../fonts/Norwester/norwester.woff') format('Web Open Font Format');
+}
+
+@font-face {
+    font-family: 'RubikR';
+    src: url('../fonts/Rubik/Rubik-Regular.ttf') format('truetype');
+}
+
+:root {
+    --blue: #1A20B3;
+    --purple: #752877;
+    --white: #FFFFFF;
+    --black: #000000;
+    --black-variant: #252525;
+    --form: #CCCCCC;
+    --legend: #D9D9D9;
+    --validar: rgba(102, 204, 102, 1);
+    --nulo: rgba(204, 102, 102, 1);
+    --black-variant-2: #131313;
+    --primaryfont: 'Norwester';
+    --secondaryfont: 'RubikR'
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    padding: 0px;
+    margin: 0px
+}
+
+.inicio {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--black);
+}
+
+.inicio div {
+    color: var(--white);
+    font-family: var(--secondaryfont);
+    text-align: center;
+    overflow: auto;
+}
+
+.inicio div p {
+    font-size: larger;
+    margin-bottom: 30px;
+}
+
+.inicio div input {
+    outline: none;
+    background-color: var(--purple);
+    color: var(--white);
+    padding-left: 15px;
+    border-radius: 30px;
+    border: 1px solid var(--purple);
+    height: 3rem;
+    width: 70%;
+    font-family: var(--secondaryfont);
+    margin-top: 20px;
+}
+
+.flex-sb {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center
+}
+
+.flex-cc {
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.btn-p {
+    width: 70%;
+    height: 3rem;
+    background-color: var(--black);
+    color: var(--white);
+    outline: none;
+    border-radius: 40px;
+    font-family: var(--secondaryfont);
+    cursor: pointer;
+    margin: 0px auto;
+    margin-top: 20px;
+    border: 1px solid var(--white)
+}
+
+a#Continuar, a#Continuar:visited, a#Continuar:hover {
+    color: var(--white);
+    font-family: var(--secondaryfont);
+    text-decoration: none;
+}
