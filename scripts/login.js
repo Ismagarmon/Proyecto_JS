@@ -34,7 +34,6 @@ const pprincipal = () => {
             document.cookie = `Nombre=${nombre}`
 
             input.value = ''
-            localStorage.setItem('puntuacion', JSON.stringify({ nombre: `${getCookie('Nombre')}`, puntuacion: 0 }))
         }
     })
 }

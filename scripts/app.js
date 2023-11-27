@@ -401,7 +401,7 @@ class CardGame extends Contador {
         this.timer.style.color = 'var(--white)'
         this.timer.style.fontFamily = 'var(--secondaryfont)'
         this.timer.style.fontSize = 'large'
-
+        localStorage.setItem('puntuacion', JSON.stringify({ nombre: `${getCookie('Nombre')}`, puntuacion: 0 }))
     }
 
     pintarcartas() {
