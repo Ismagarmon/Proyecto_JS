@@ -391,7 +391,7 @@ class CardGame extends Contador {
     pttiempo = document.getElementById('ttranscurridop')
     span_mj = document.getElementById('mj')
     puntuacion = 0
-    cant_segundos = 150
+    cant_segundos = 92
     intervalo_tiempo = null
     cant_puntos = 280
 
@@ -579,7 +579,7 @@ class CardGame extends Contador {
             this.pttiempo.insertAdjacentElement('afterend', this.timer)
             this.cant_segundos--
             this.cant_puntos--
-
+            console.log(this.cant_segundos)
             if (this.cant_segundos == 0) {
                 this.Perder()
                 clearInterval(this.intervalo_tiempo)
