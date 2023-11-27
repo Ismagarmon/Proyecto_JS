@@ -295,14 +295,16 @@ class ReproductorMusica extends Contador {
         this.audio.pause()
     }
 
-    //Aquí es donde voy creando los numeros con el tiempo actualizado en cada segundo
+    //Esta funcion lo que hago es ir añadiendo el valor actual a la barra de progreso para que se vaya rellenando
     actualizartiempo() {
+
         if (this.audio.currentTime > 0) {
             let progreso = this.audio.currentTime
             let tiempo = Math.floor(progreso)
             this.barra_tiempo.value = tiempo
         }
 
+        //Si el audio ha finalizado pongo en el parrafo el final del tiempo, esto lo se por el intervalo, aquí no lo paro, pero en el juego de las cartas si
         if (this.audio.ended) {
 
             let svg_play = document.getElementById('play')
@@ -317,8 +319,6 @@ class ReproductorMusica extends Contador {
                 segundos = '0' + Math.floor(this.audio.duration.toFixed(0) % 60)
             }
             this.p.textContent = `${minutos} : ${segundos}`
-
-            this.barra_tiempo.value += 1
         }
     }
 
@@ -666,6 +666,7 @@ class CardGame extends Contador {
 
             this.array_cartas = []
             this.cartas_acertadas++
+            //Si las cartas son 7, es decir, todas las parejas, has ganado, hago siempre referencia a this, porque estoy utilizando los atributos de la clase
             if (this.cartas_acertadas === 7) {
                 this.Ganar()
             }
@@ -687,6 +688,7 @@ class CardGame extends Contador {
             setTimeout(() => {
 
                 divocultar.forEach(div => {
+                    //Solo pillo los que contengan la clase seleccionado porque hay parejas y si no, me pillaria los dos y eso está mal
                     if (div.classList.contains('seleccionado')) {
 
                         div.classList.remove('seleccionado')
@@ -723,7 +725,7 @@ class CardGame extends Contador {
 
         }
         json.puntos = this.puntuacion
-        //Utilizo el localstorage para 
+        //Utilizo el localstorage para volver a guardar la puntuacion del jugador
         localStorage.setItem("puntos", JSON.stringify(json))
 
     }
@@ -731,6 +733,7 @@ class CardGame extends Contador {
     //Esta es la función que uso para calcular el tiempo de juego y además donde tengo un temporizador de 1:30 de tiempo máximo
     //y la cantidad de puntos para que cuanto menos tiempo pase menos puntos obtengas
     StartTimer() {
+        //Creo el nuevo intervalo de tiempo, que se actualize cada 1 segundo
         this.intervalo_tiempo = setInterval(() => {
             this.timer.textContent = this.Timer()
 
@@ -755,6 +758,7 @@ class CardGame extends Contador {
 
     //Este es el metodo principal, para volver a jugar y volver a pintar las cartar en el tablero
     Play() {
+        //Aquí llamo a este metodo aunque hayas ganado o no, por si no terminas la partida que se vuelva a resetear todo, simplemente por confirmar cambios
         this.reestablecertablero()
         this.pintarcartas()
     }
