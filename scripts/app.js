@@ -7,7 +7,7 @@ window.onload = () => {
 }
 
 const loadmenu = () => {
-    let div = document.getElementById('mp')
+    let div_mp = document.getElementById('mp')
     let div_p = document.getElementById('p-principal')
     let div_gc = document.getElementById('gc')
 
@@ -15,14 +15,28 @@ const loadmenu = () => {
 
     let button_juego = document.getElementById('juego')
 
+    let div_m_mp = document.getElementById('menu-mp')
+
+    let div_m_gc = document.getElementById('menu-gc')
+
     button_mp.addEventListener('click', () => {
         div_p.classList.add('none')
-        div.classList.remove('none')
+        div_mp.classList.remove('none')
     })
 
     button_juego.addEventListener('click',() => {
         div_p.classList.add('none')
         div_gc.classList.remove('none')
+    })
+
+    div_m_mp.addEventListener('click',() => {
+        div_p.classList.remove('none')
+        div_mp.classList.add('none')
+    })
+
+    div_m_gc.addEventListener('click',() => {
+        div_p.classList.remove('none')
+        div_gc.classList.add('none')
     })
 }
 
@@ -375,12 +389,11 @@ class CardGame extends Contador {
     btnplay = document.getElementById('playbutton')
     timer = document.getElementById('ttranscurrido')
     pttiempo = document.getElementById('ttranscurridop')
-    span_puntuacion = document.getElementById('puntuacion')
     span_mj = document.getElementById('mj')
     puntuacion = 0
     cant_segundos = 150
     intervalo_tiempo = null
-    vj = 0
+    cant_puntos = 280
 
     constructor() {
         super()
@@ -538,8 +551,9 @@ class CardGame extends Contador {
             this.segundos = 0
             this.minutos = 0
 
-            this.puntuacion = this.cant_segundos * 30
-            this.span_puntuacion = this.puntuacion
+            this.timer.textContent = '0 : 00'
+
+            this.puntuacion = this.cant_puntos * 30
 
             let jsonEnLocalStorage = localStorage.getItem("puntuacion")
             let json = JSON.parse(jsonEnLocalStorage)
@@ -564,11 +578,11 @@ class CardGame extends Contador {
 
             this.pttiempo.insertAdjacentElement('afterend', this.timer)
             this.cant_segundos--
-            if (this.cant_segundos === 0) {
+            this.cant_puntos--
+
+            if (this.cant_segundos == 0) {
                 this.Perder()
                 clearInterval(this.intervalo_tiempo)
-                this.segundos = 0
-                this.minutos = 0
             }
 
         }, 1000)
@@ -581,6 +595,8 @@ class CardGame extends Contador {
         clearInterval(this.intervalo_tiempo)
         this.segundos = 0
         this.minutos = 0
+
+        this.timer.textContent = '0 : 00'
 
         this.cartas_acertadas = 0
 
