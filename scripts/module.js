@@ -26,6 +26,10 @@ export const imgcard = (ruta, width, height) => `<image src="${ruta}" width="${w
 
 export class Contador {
 
+    constructor(){
+        
+    }
+
     minutos = 0
     segundos = 0
 

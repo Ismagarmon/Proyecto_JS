@@ -6,6 +6,19 @@ window.onload = () => {
     NewGame()
 }
 
+
+function getCookie(nombre) {
+    const cookies = document.cookie.split(';')
+
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim()
+
+        if (cookie.startsWith(nombre + '=')) {
+            return cookie.slice(nombre.length + 1)
+        }
+    }
+}
+
 const loadmenu = () => {
     let div_mp = document.getElementById('mp')
     let div_p = document.getElementById('p-principal')
@@ -397,11 +410,8 @@ class CardGame extends Contador {
 
     constructor() {
         super()
-        this.pttiempo.style.paddingBottom = '1rem'
-        this.timer.style.color = 'var(--white)'
-        this.timer.style.fontFamily = 'var(--secondaryfont)'
-        this.timer.style.fontSize = 'large'
-        localStorage.setItem('puntuacion', JSON.stringify({ nombre: `${getCookie('Nombre')}`, puntuacion: 0 }))
+        this.estilarTimer()
+        localStorage.setItem("puntos", JSON.stringify({nombreusuario: getCookie('Nombre'), puntos: 0}))
     }
 
     pintarcartas() {
@@ -420,6 +430,13 @@ class CardGame extends Contador {
             this.generarcartas(array_primero, array_segundo, json)
 
         })
+    }
+
+    estilarTimer(){
+        this.pttiempo.style.paddingBottom = '1rem'
+        this.timer.style.color = 'var(--white)'
+        this.timer.style.fontFamily = 'var(--secondaryfont)'
+        this.timer.style.fontSize = 'large'
     }
 
     generarcartas(array_primero, array_segundo, json) {
@@ -555,7 +572,7 @@ class CardGame extends Contador {
 
             this.puntuacion = this.cant_puntos * 30
 
-            let jsonEnLocalStorage = localStorage.getItem("puntuacion")
+            let jsonEnLocalStorage = localStorage.getItem("puntos")
             let json = JSON.parse(jsonEnLocalStorage)
 
             if (this.puntuacion > this.span_mj.textContent) {
@@ -563,8 +580,8 @@ class CardGame extends Contador {
                 alert('¡Has obtenido record personal!')
 
             }
-            json.puntuacion = this.puntuacion
-            localStorage.setItem("puntuacion", JSON.stringify(json));
+            json.puntos = this.puntuacion
+            localStorage.setItem("puntos", JSON.stringify(json))
 
         }, 400)
 
@@ -603,6 +620,16 @@ class CardGame extends Contador {
     }
 
     Play() {
+        this.tablero.innerHTML = ''
+        
+        clearInterval(this.intervalo_tiempo)
+        this.segundos = 0
+        this.minutos = 0
+
+        this.timer.textContent = '0 : 00'
+
+        this.cartas_acertadas = 0
+
         this.pintarcartas()
     }
 

@@ -5,13 +5,10 @@ window.onload = () => {
 const pprincipal = () => {
 
     let input = document.getElementById('input-nombre')
-
-    input.value = ''
-    let div_p = document.getElementById('home')
     let btn = document.getElementById('btn-principal')
+    input.value = ''
     btn.style.display = 'none'
-    let div_principal = document.getElementById('p-principal')
-    const regexpassword = /^(?=.*[A-Z]){1,}(?=.*[a-z]){1,}(?=.*[0-9]){1,}(?=.*[\W_]){1,}/
+    const regexpassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W_]).{8,}$/
 
     input.addEventListener('input', () => {
         if (input.value === '') {
@@ -24,28 +21,21 @@ const pprincipal = () => {
 
     btn.addEventListener('click', () => {
         if (!regexpassword.test(input.value)) {
-            swal('Info:', 'El nombre tiene que tener una mayúscula, una minúscula, un número y un símbolo como mínimo.', 'error')
+            swal('Info:', 'El nombre tiene que tener una mayúscula, una minúscula, un número y un símbolo como mínimo, y 8 cacarteres.', 'error')
         }
         else {
             let nombre = input.value
-            div_p.classList.add('none')
-            div_principal.classList.remove('none')
-            
-            document.cookie = `Nombre=${nombre}`
+            setCookie('Nombre',nombre,9999)
+            window.location.assign('app.html')
 
             input.value = ''
         }
     })
 }
 
-function getCookie(nombre) {
-    const cookies = document.cookie.split(';');
-
-    for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-
-        if (cookie.startsWith(nombre + '=')) {
-            return cookie.slice(nombre.length + 1);
-        }
-    }
+function setCookie(nombre, valor, diasExpiracion) {
+    const fechaExpiracion = new Date()
+    fechaExpiracion.setTime(fechaExpiracion.getTime() + (diasExpiracion * 24 * 60 * 60 * 1000))
+    const cadenaExpiracion = `expires=${fechaExpiracion.toUTCString()}`
+    document.cookie = `${nombre}=${valor}; ${cadenaExpiracion}; path=/`
 }
