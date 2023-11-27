@@ -546,6 +546,8 @@ class CardGame extends Contador {
 
     //Con esto lo unico que hago es estilar un poco el timer para quedarlo bonito
     estilarTimer() {
+
+
         this.pttiempo.style.paddingBottom = '1rem'
         this.timer.style.color = 'var(--white)'
         this.timer.style.fontFamily = 'var(--secondaryfont)'
@@ -601,28 +603,34 @@ class CardGame extends Contador {
 
     empezarjuego(json) {
 
+        //Selecciono todos los divs de dentro del tablero
         let divs = this.tablero.querySelectorAll('div')
 
         setTimeout(() => {
+            //Creo un timeout para que puedas ver las cartas durante 4 segundos y luego te ponga la imagen pero de interrogación para que no veas la otra parte de la cara
             divs.forEach(div => {
                 div.classList.add('rotate')
                 div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
                 let img = div.querySelector('img')
                 img.classList.add('rotate')
-
+                //Y les añado el evento de click en el que comprueba la carta 
                 div.addEventListener('click', () => this.Voltear(div, json))
             })
         }, 4000)
     }
 
+    //Esta es la funcion que comprueba la carta
     Voltear(div, json) {
         if(div.classList.contains('drop')){
+            //Si tiene la clase de que ya ha sido eliminada no hace nada
             alert('No haces nada pulsando en una carta adivinada')
         }
         else {
+            //Sino, añade al array global los id del div y muestra el contenido de este
             this.array_cartas.push(parseInt(div.id))
 
             div.classList.remove('no_seleccionado')
+            //Les añado el seleccionado para que se diferencie de su pareja, voy modificando dinamicamente el DOM
             div.classList.add('seleccionado')
             div.classList.remove('rotate')
             div.classList.add('rotate-reverse')
@@ -631,13 +639,17 @@ class CardGame extends Contador {
                 div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
             }, 200)
     
+            //Llamamos a la función de comprobar
             this.comprobar()
         }
         
     }
 
+    //Esta es la funcion comprobar
     comprobar() {
 
+        //Si el array tiene 2 numeros y son iguales, selecciona los divs con ese id, les quita el cursor pointer y además los hace desaparecer, y quitamos el evento
+        //añadimos 1 a las cartas acertadas hasta que tenga 7 y vaciamos el array
         if (this.array_cartas.length == 2 && this.array_cartas[0] === this.array_cartas[1]) {
             let divocultar = document.querySelectorAll(`div[id="${this.array_cartas[0]}"]`)
 
@@ -658,6 +670,7 @@ class CardGame extends Contador {
                 this.Ganar()
             }
         }
+        //Si el array tiene 2 caracteres pero no son iguales, llamamos al metodo resetear las cartas y vaciamos el array para los nuevos numeros
         else if (this.array_cartas.length == 2 && this.array_cartas[0] !== this.array_cartas[1]) {
 
             this.ResetearCartas(this.array_cartas)
@@ -665,7 +678,9 @@ class CardGame extends Contador {
         }
     }
 
+    //Esta es la funcion que recibe el array lleno para observar los divs que hay ahí
     ResetearCartas(array_cartas) {
+        //Seleccionamos cada div por su id y además compruebo si es el seleccionado, porque al haber dos iguales tienen que tener algo distinto
         array_cartas.forEach(id => {
             let divocultar = document.querySelectorAll(`div[id="${id}"]`)
 
@@ -680,7 +695,9 @@ class CardGame extends Contador {
                         div.classList.add('rotate')
                         div.innerHTML = imgcard('img/Interrogacion.png', 50, 50)
                         let img = div.querySelector('img')
+                        //Esto lo añado para que cuando se rote el div, se vuelva a rotar la imagen y quede correcta, simplemente visual
                         img.classList.add('rotate')
+
                     }
                 })
 
@@ -688,6 +705,8 @@ class CardGame extends Contador {
         })
     }
 
+    //Esta es la funcion para saber si ha ganado, si he ganado, le saco una alerta, le calculo los puntos que obtiene y además si la puntuación que ha obtenido
+    //es mayor que se actualice en el json del localstorage
     Ganar() {
 
         alert('¡Has ganado, enhorabuena!')
@@ -704,10 +723,13 @@ class CardGame extends Contador {
 
         }
         json.puntos = this.puntuacion
+        //Utilizo el localstorage para 
         localStorage.setItem("puntos", JSON.stringify(json))
 
     }
 
+    //Esta es la función que uso para calcular el tiempo de juego y además donde tengo un temporizador de 1:30 de tiempo máximo
+    //y la cantidad de puntos para que cuanto menos tiempo pase menos puntos obtengas
     StartTimer() {
         this.intervalo_tiempo = setInterval(() => {
             this.timer.textContent = this.Timer()
@@ -715,6 +737,7 @@ class CardGame extends Contador {
             this.pttiempo.insertAdjacentElement('afterend', this.timer)
             this.cant_segundos--
             this.cant_puntos--
+            //Si la cantidad de segundos es 0, se te acaba el tiempo y llamo al metodo perder
             if (this.cant_segundos == 0) {
                 this.Perder()
                 clearInterval(this.intervalo_tiempo)
@@ -723,21 +746,23 @@ class CardGame extends Contador {
         }, 1000)
     }
 
+    //Esta es la función de perder
     Perder() {
         this.reestablecertablero()
         alert('¡Has perdido, vuelve a intentarlo!')
 
     }
 
+    //Este es el metodo principal, para volver a jugar y volver a pintar las cartar en el tablero
     Play() {
         this.reestablecertablero()
         this.pintarcartas()
     }
 
+    //Limpio el tablero para que no haya nada, reestablezco los segundos de la clase padre que es donde está el timer, además vuelvo a reestrablecer los valores inciales de la aplicacion
     reestablecertablero(){
         this.tablero.innerHTML = ''
 
-        clearInterval(this.intervalo_tiempo)
         this.segundos = 0
         this.minutos = 0
 
