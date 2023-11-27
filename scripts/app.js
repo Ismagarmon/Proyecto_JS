@@ -382,6 +382,7 @@ class ReproductorMusica extends Contador {
             svg_pause.classList.add('none')
             svg_play.classList.remove('none')
 
+            //Pongo el tiempo a 0 y pauso el audio, tanto el parrafo como el audio
             this.p2.textContent = '0 : 00'
             this.audio.currentTime = 0
             this.audio.pause()
@@ -659,7 +660,9 @@ class CardGame extends Contador {
                 div.classList.add('cursor_default')
 
                 setTimeout(() => {
+                    //Añado la clase drop para que desaparezca la carta y no la veas
                     div.classList.add('drop')
+                    //Elimino el evento de escuchar
                     div.removeEventListener('click', () => this.Voltear())
                 }, 500)
             })
@@ -732,7 +735,9 @@ class CardGame extends Contador {
 
     //Esta es la función que uso para calcular el tiempo de juego y además donde tengo un temporizador de 1:30 de tiempo máximo
     //y la cantidad de puntos para que cuanto menos tiempo pase menos puntos obtengas
+
     StartTimer() {
+
         //Creo el nuevo intervalo de tiempo, que se actualize cada 1 segundo
         this.intervalo_tiempo = setInterval(() => {
             this.timer.textContent = this.Timer()
