@@ -673,9 +673,12 @@ class CardGame extends Contador {
             this.array_cartas = []
             this.cartas_acertadas++
             //Si las cartas son 7, es decir, todas las parejas, has ganado, hago siempre referencia a this, porque estoy utilizando los atributos de la clase
-            if (this.cartas_acertadas === 7) {
-                this.Ganar()
-            }
+            setTimeout(() => {
+                if (this.cartas_acertadas === 7) {
+                    this.Ganar()
+                }
+            },1000)
+            
         }
         //Si el array tiene 2 caracteres pero no son iguales, llamamos al metodo resetear las cartas y vaciamos el array para los nuevos numeros
         else if (this.array_cartas.length == 2 && this.array_cartas[0] !== this.array_cartas[1]) {
@@ -717,23 +720,24 @@ class CardGame extends Contador {
     //es mayor que se actualice en el json del localstorage
     Ganar() {
 
-        alert('¡Has ganado, enhorabuena!')
+        setTimeout(() => {
+            alert('¡Has ganado, enhorabuena!')
+            
+            this.puntuacion = this.cant_puntos * 30
+    
+            let jsonEnLocalStorage = localStorage.getItem("puntos")
+            let json = JSON.parse(jsonEnLocalStorage)
+            if (this.puntuacion > json.puntos) {
+                this.span_mj.textContent = this.puntuacion
+                alert('¡Has obtenido record personal!')
+    
+            }
+            json.puntos = this.puntuacion
+            //Utilizo el localstorage para volver a guardar la puntuacion del jugador
+            localStorage.setItem("puntos", JSON.stringify(json))
+        }, 1000)
+        
         this.reestablecertablero()
-
-        this.puntuacion = this.cant_puntos * 30
-
-        let jsonEnLocalStorage = localStorage.getItem("puntos")
-        let json = JSON.parse(jsonEnLocalStorage)
-
-        if (this.puntuacion > this.span_mj.textContent) {
-            this.span_mj.textContent = this.puntuacion
-            alert('¡Has obtenido record personal!')
-
-        }
-        json.puntos = this.puntuacion
-        //Utilizo el localstorage para volver a guardar la puntuacion del jugador
-        localStorage.setItem("puntos", JSON.stringify(json))
-
     }
 
     //Esta es la función que uso para calcular el tiempo de juego y además donde tengo un temporizador de 1:30 de tiempo máximo
@@ -759,8 +763,9 @@ class CardGame extends Contador {
 
     //Esta es la función de perder
     Perder() {
-        this.reestablecertablero()
         alert('¡Has perdido, vuelve a intentarlo!')
+        this.reestablecertablero()
+        
 
     }
 
@@ -782,8 +787,8 @@ class CardGame extends Contador {
 
         this.cartas_acertadas = 0
         this.cant_puntos = 200
-        this.puntuacion = 0
         this.cant_segundos = 92
+        clearInterval(this.intervalo_tiempo)
     }
 
 }

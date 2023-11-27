@@ -14,7 +14,7 @@ const pprincipal = () => {
     btn.style.display = 'none'
 
     //Esta es la regex para poner el nombre
-    const regexpassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W_]).{8,}$/
+    const regexpassword = /^[A-Za-z0-9\W]+$/g
     
     //Este es el evento para que aparezca el botón cuando se escriba algo
     input.addEventListener('input', () => {
@@ -30,7 +30,7 @@ const pprincipal = () => {
     //se haga una cookie con el nombre de dicho usuario
     btn.addEventListener('click', () => {
         if (!regexpassword.test(input.value)) {
-            
+            alert('No has introducido correctamente el nombre')
         }
         else {
             let nombre = input.value
