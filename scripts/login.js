@@ -2,6 +2,7 @@
 
 window.onload = () => {
     pprincipal()
+    swal('Info:', 'La contraseña tiene que tener 8 caracaters como mínimo, mayusculas, minusculas, números y al menos un símbolo.', 'warning')
 }
 
 const pprincipal = () => {
@@ -14,7 +15,7 @@ const pprincipal = () => {
 
     //Esta es la regex para poner el nombre
     const regexpassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[\W_]).{8,}$/
-
+    
     //Este es el evento para que aparezca el botón cuando se escriba algo
     input.addEventListener('input', () => {
         if (input.value === '') {
@@ -29,7 +30,7 @@ const pprincipal = () => {
     //se haga una cookie con el nombre de dicho usuario
     btn.addEventListener('click', () => {
         if (!regexpassword.test(input.value)) {
-            swal('Info:', 'El nombre tiene que tener una mayúscula, una minúscula, un número y un símbolo como mínimo, y 8 cacarteres.', 'error')
+            
         }
         else {
             let nombre = input.value
