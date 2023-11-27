@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/jpg" href="img/unnamed.png" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <script type="module" src="scripts/app.js"></script>
     <title>Proyecto_JS</title>
 </head>
 
 <body>
-    <div class="inicio flex-cc none" id="home"> <!-- Aqui tengo que quitar el none -->
-        <div>
+    <div class="inicio flex-cc" id="home"> <!-- Aqui tengo que quitar el none -->
+        <div style="height: 15rem;">
             <p>Introduce tu nombre de usuario: </p>
             <input type="text" placeholder="Nombre" id="input-nombre">
             <button class="flex-cc btn-p" id="btn-principal">
@@ -313,7 +313,7 @@
 
         </div>
     </div>
-    <div class="gamecard" id="gc"> <!-- Aqui tengo que poner el none -->
+    <div class="gamecard none" id="gc"> <!-- Aqui tengo que poner el none -->
         <div class="zonatablero flex-sb" id="zonatablero">
             <div class="tablero grid" id="tablerogrid">
 

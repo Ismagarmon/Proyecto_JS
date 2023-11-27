@@ -141,6 +141,7 @@ body {
     cursor: pointer;
     margin: 0px auto;
     margin-top: 20px;
+    border: 1px solid var(--white)
 }
 
 p#Continuar {
@@ -337,7 +338,7 @@ button:active {
 }
 
 .text {
-    width: 10%;
+    width: 20%;
     height: 5rem;
     text-align: left;
 }
@@ -357,6 +358,7 @@ button:active {
     display: inline-block;
     color: var(--white);
     font-family: var(--secondaryfont);
+    margin-right: 7rem;
 }
 
 .rotate {

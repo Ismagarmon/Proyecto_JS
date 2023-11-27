@@ -10,6 +10,8 @@ window.onload = () => {
 const pprincipal = () => {
 
     let input = document.getElementById('input-nombre')
+
+    input.value = ''
     let div_p = document.getElementById('home')
     let btn = document.getElementById('btn-principal')
     btn.style.display = 'none'
@@ -33,11 +35,25 @@ const pprincipal = () => {
             let nombre = input.value
             div_p.classList.add('none')
             div_principal.classList.remove('none')
-            localStorage.setItem('puntuacion', JSON.stringify({ nombre: `${nombre}`, puntuacion: 0 }))
+            
             document.cookie = `Nombre=${nombre}`
+
             input.value = ''
+            localStorage.setItem('puntuacion', JSON.stringify({ nombre: `${getCookie('Nombre')}`, puntuacion: 0 }))
         }
     })
+}
+
+function getCookie(nombre) {
+    const cookies = document.cookie.split(';');
+
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+
+        if (cookie.startsWith(nombre + '=')) {
+            return cookie.slice(nombre.length + 1);
+        }
+    }
 }
 
 const loadmusicplayer = () => {
@@ -406,6 +422,7 @@ class CardGame extends Contador {
     puntuacion = 0
     cant_segundos = 150
     intervalo_tiempo = null
+    vj = 0
 
     constructor() {
         super()
@@ -413,7 +430,7 @@ class CardGame extends Contador {
         this.timer.style.color = 'var(--white)'
         this.timer.style.fontFamily = 'var(--secondaryfont)'
         this.timer.style.fontSize = 'large'
-        
+
     }
 
     pintarcartas() {
@@ -553,27 +570,25 @@ class CardGame extends Contador {
     }
 
     Ganar() {
-        this.tablero.classList.add('none')
-        let p = document.createElement('p')
-        p.textContent = '¡Has ganado,enhorabuena!'
-        p.style.fontSize = '3rem'
-        p.style.fontFamily = 'var(--secondaryfont)'
-
-        let div_tablero = document.getElementById('zonatablero')
-        div_tablero.insertAdjacentElement('afterbegin',p)
-
-        this.intervalo_tiempo = clearInterval()
 
         setTimeout(() => {
+            this.tablero.innerHTML = ''
+
+            alert('¡Has ganado, enhorabuena!')
+
+            clearInterval(this.intervalo_tiempo)
+            this.segundos = 0
+            this.minutos = 0
+
             this.puntuacion = this.cant_segundos * 30
             this.span_puntuacion = this.puntuacion
 
             let jsonEnLocalStorage = localStorage.getItem("puntuacion")
             let json = JSON.parse(jsonEnLocalStorage)
 
-            if(this.puntuacion > this.span_mj.textContent){
+            if (this.puntuacion > this.span_mj.textContent) {
                 this.span_mj.textContent = this.puntuacion
-                swal('','¡Has obtenido record personal!','success')
+                alert('¡Has obtenido record personal!')
 
             }
             json.puntuacion = this.puntuacion
@@ -581,6 +596,7 @@ class CardGame extends Contador {
 
         }, 400)
 
+        this.cartas_acertadas = 0
 
     }
 
@@ -590,29 +606,30 @@ class CardGame extends Contador {
 
             this.pttiempo.insertAdjacentElement('afterend', this.timer)
             this.cant_segundos--
-            if(this.cant_segundos === 0){
+            if (this.cant_segundos === 0) {
                 this.Perder()
+                clearInterval(this.intervalo_tiempo)
+                this.segundos = 0
+                this.minutos = 0
             }
 
         }, 1000)
     }
 
     Perder() {
-        this.tablero.classList.add('none')
-        let p = document.createElement('p')
-        p.textContent = '¡Has perdido,buen intento!'
-        p.style.fontSize = '3rem'
-        p.style.fontFamily = 'var(--secondaryfont)'
+        this.tablero.innerHTML = ''
+        alert('¡Has perdido, vuelve a intentarlo!')
 
-        let div_tablero = document.getElementById('zonatablero')
+        clearInterval(this.intervalo_tiempo)
+        this.segundos = 0
+        this.minutos = 0
 
-        div_tablero.insertAdjacentElement('afterbegin',p)
-        this.intervalo_tiempo = clearInterval()
+        this.cartas_acertadas = 0
 
     }
 
     Play() {
-        
+        this.pintarcartas()
     }
 
 }
