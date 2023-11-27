@@ -1,25 +1,34 @@
+//Con esta linea lo que hacemos es importar la clase, los metodos y los html para crear las dos aplicacion, en donde nos darán
+//un json con las canciones y las cartas que vamos a usar para el juego de cartas
 import { imgcard, getCardList, getMusicList, svgplaymusiclist, Contador } from './module.js'
 
+//En cuanto se carge el DOM ejecutamos estas tres funciones
 window.onload = () => {
     loadmenu()
     Controls()
     NewGame()
 }
 
-
+//Funcion para obtener el nombre de la cookie que hemos creado antes
 function getCookie(nombre) {
+    //metemos en un array todas las cookies porque están separadas por ; 
     const cookies = document.cookie.split(';')
 
+    //Las vamos iterando
     for (let i = 0; i < cookies.length; i++) {
+        //quitamos los epaciones en blanco para que no haya problemas de longitud luego
         const cookie = cookies[i].trim()
 
+        //Si la cookie empieza por el nombre que le pasamos que nos de todo lo restante con el métido slice, que es lo que hay a la derecha del =
         if (cookie.startsWith(nombre + '=')) {
             return cookie.slice(nombre.length + 1)
         }
     }
 }
 
+//En esta funcion cargamos la funcionalidad de los botones
 const loadmenu = () => {
+    //Metemos en variables todos los elementos del DOM que sean los botones
     let div_mp = document.getElementById('mp')
     let div_p = document.getElementById('p-principal')
     let div_gc = document.getElementById('gc')
@@ -32,6 +41,7 @@ const loadmenu = () => {
 
     let div_m_gc = document.getElementById('menu-gc')
 
+    //Aquí lo que hacemos es quitar y añadir la clase none para que se oculten y vayan apareciendo los que a mi me interesan
     button_mp.addEventListener('click', () => {
         div_p.classList.add('none')
         div_mp.classList.remove('none')
@@ -53,10 +63,15 @@ const loadmenu = () => {
     })
 }
 
+//Con esta funcion creamos los controles del reproductor de musica
 function Controls() {
+    //Creamos una nueva instancia del reproductor para poder utilizar sus metodos
     const reproductor = new ReproductorMusica()
+
+    //Creamos la lista del reproductor
     reproductor.crearlista()
 
+    //Obtenemos todos los svg para poder controlar las opciones del reproductor
     let svg_play = document.getElementById('play')
     let svg_pause = document.getElementById('pause')
     let svg_atras = document.getElementById('atras')
@@ -64,23 +79,37 @@ function Controls() {
     let svg_aleatorio = document.getElementById('aleatorio')
     let svg_refresh = document.getElementById('refresh')
     let path = document.getElementById('aleatoriorellenar')
+    let svgmas = document.getElementById('mas')
+    let svgmenos = document.getElementById('menos')
 
+    svgmas.addEventListener('click', function () {
+        reproductor.subirvolumen()
+    })
+
+    svgmenos.addEventListener('click', function () {
+        reproductor.bajarvolumen()
+    })
+
+    //Este sirve para empezar a escuchar la musica seleccionada
     svg_play.addEventListener('click', () => {
         reproductor.play()
         svg_play.classList.add('none')
         svg_pause.classList.remove('none')
+
         setInterval(() => {
             reproductor.actualizartiempo()
             reproductor.actualizartiemposegundos()
         }, 1000)
     })
 
+    //Este sirve para parar la musica seleccionada y cambiar el svg
     svg_pause.addEventListener('click', () => {
         reproductor.pause()
         svg_play.classList.remove('none')
         svg_pause.classList.add('none')
     })
 
+    //Este svg sirve para ir a la pista anterior, y depende si está en aleatorio, para ello tengo un atributo en la clase
     svg_atras.addEventListener('click', () => {
         if (reproductor.Random) {
             reproductor.otracancion()
@@ -89,6 +118,7 @@ function Controls() {
         }
     })
 
+    //Este svg sirve para ir a la pista posterior, y depende si está en aleatorio, para ello tengo un atributo en la clase
     svg_adelante.addEventListener('click', function () {
         if (reproductor.Random) {
             reproductor.otracancion()
@@ -97,6 +127,7 @@ function Controls() {
         }
     })
 
+    //Esto sirve para cambiar a verde el svg y mostrar al usuario el modo aleatorio o el normal
     svg_aleatorio.addEventListener('click', () => {
         reproductor.random()
         if (path.getAttribute('fill') == 'green') {
@@ -106,24 +137,34 @@ function Controls() {
         }
     })
 
+    //Este sirve para poner la cancion a 0
     svg_refresh.addEventListener('click', () => {
         reproductor.refrescarcancion()
     })
 }
 
+//Esta funcion sirve para crear una nueva instancia del juego de cartas, y obteniendo el botón empezar para crear un nuevo juego
 function NewGame() {
+    //Esta es la instancia del juego de cartas
     const cardgame = new CardGame()
 
     let buttonstart = document.querySelector('#playbutton')
 
+    //Con esta accion siempre empiezo un juego nuevo
     buttonstart.addEventListener('click', function () {
         cardgame.Play()
         buttonstart.textContent = 'Jugar de nuevo'
     })
 }
 
+//Aquí declaro la clase del reproductor de música, en donde hereda de la clase padre Contador, que en este momento no utilizo un contador que tiene dicha clase
+
 class ReproductorMusica extends Contador {
 
+    //Aquí declaro todos los atributos que tiene esta clase, que es lo que vamos a ir utilizando para ir cambiando de musica y realizar las peticiones
+    //de cambiar musica y pararla, etc.....
+
+    //Declaro en la propia clase una nueva instancia de auidio,pero no la inizializo
     audio = new Audio()
     refresh = document.querySelector('#refresh')
     Random = false
@@ -139,12 +180,16 @@ class ReproductorMusica extends Contador {
     volumen = document.querySelector('#volumen')
     pvolumen = document.querySelector('#volumenmusic')
 
+    //Creo un metodo get para obtener el ID de la cancion que hay en este momento
     get getID() {
         return this.Id
     }
 
+    //En el constructor llamo al constructor de la clase padre y creo el texto para la primera cancion de todas
     constructor() {
         super()
+
+        //Voy metiendo el nombre de las canciones a los parrafos, imagenes, volumen del auido, etc....
         this.p_titulo.textContent = "Initial D - Don't Go Baby"
         this.img.src = 'https://www.crunchyroll.com/imgsrv/display/thumbnail/1200x675/catalog/crunchyroll/aaee4e34242e3abc0af317edbada66aa.jpe'
         this.audio.src = 'audio/ID_B.mp3'
@@ -153,33 +198,8 @@ class ReproductorMusica extends Contador {
         this.Id = 0
         this.pvolumen.textContent = this.audio.volume * 10
 
-        this.masv.addEventListener('click', () => {
-            let nuevo_volumen = this.volumen.value + 10
-            if (nuevo_volumen >= 100) {
-                this.volumen.value = 100
-                this.cambiarvolumen(1)
-                this.pvolumen.textContent = this.audio.volume * 10
-            } else {
-                this.volumen.value = nuevo_volumen
-                this.cambiarvolumen((nuevo_volumen / 100).toFixed(1))
-                this.pvolumen.textContent = this.audio.volume * 10
-            }
-        })
-
-        this.menosv.addEventListener('click', () => {
-            let nuevo_volumen = this.volumen.value - 10
-
-            if (nuevo_volumen <= 0) {
-                this.volumen.value = 0
-                this.cambiarvolumen(0)
-                this.pvolumen.textContent = this.audio.volume * 10
-            } else {
-                this.volumen.value = nuevo_volumen
-                this.cambiarvolumen((nuevo_volumen / 100).toFixed(1))
-                this.pvolumen.textContent = this.audio.volume * 10
-            }
-        })
-
+        //Lo que hago aquí es darle estilos a los numeros para que no queden feos y además voy metiendo valores de los cuales
+        //luego les voy a ir utilizando para actilizar el tiempo de la cancion y el actual
         this.p.textContent = '0 : 00'
         this.p.style.cssText = `
             color: white;
@@ -199,17 +219,63 @@ class ReproductorMusica extends Contador {
         this.barra_tiempo.insertAdjacentElement('beforebegin', this.p2)
     }
 
+    //Esta es la funcion para subir el volumen, en donde voy pillando el volumen actual
+    //y lo voy sumando 10 hasta que llegue a 100 como máximo, paso a la funcion valores entre 1 y 0, porque es lo que utiliza la API Auido de JS
+    subirvolumen() {
+        let nuevo_volumen = this.volumen.value + 10
+
+        //Si es mayor que 100 el numero que sea 100 como maximo
+        if (nuevo_volumen >= 100) {
+            this.volumen.value = 100
+            this.cambiarvolumen(1)
+            this.pvolumen.textContent = this.audio.volume * 10
+        } else {
+            this.volumen.value = nuevo_volumen
+            //Aquí lo que hago es que el numero solo tenga un decimal y es lo que le paso a la funcion
+            this.cambiarvolumen((nuevo_volumen / 100).toFixed(1))
+            this.pvolumen.textContent = this.audio.volume * 10
+        }
+    }
+
+    //Esta es la funcion para bajar el volumen, en donde voy pillando el volumen actual
+    //y lo voy restando 10 hasta que llegue a 0 como máximo, paso a la funcion valores entre 1 y 0, porque es lo que utiliza la API Auido de JS
+    bajarvolumen() {
+        let nuevo_volumen = this.volumen.value - 10
+
+        if (nuevo_volumen <= 0) {
+            this.volumen.value = 0
+            this.cambiarvolumen(0)
+            this.pvolumen.textContent = this.audio.volume * 10
+        } else {
+            this.volumen.value = nuevo_volumen
+            //Aquí lo que hago es que el numero solo tenga un decimal y es lo que le paso a la funcion
+            this.cambiarvolumen((nuevo_volumen / 100).toFixed(1))
+            this.pvolumen.textContent = this.audio.volume * 10
+        }
+    }
+
+    //Esta es la funcion que utilizo para poner en marcha la música, en donde creo los valores de la duracion correctamente
     play() {
         this.audio.play()
 
+        //Los minutos son el resto de dividir entre 60 que es lo que tiene un minuto
         const minutos = Math.floor(this.audio.duration.toFixed(0) / 60)
+
+        //Los segundos son el resto de dividir entre 60
         let segundos = Math.floor(this.audio.duration.toFixed(0) % 60)
+
+        //Si los segundos son menos que 
         if (segundos < 10) {
+            //Aquí lo que hago es que el numero solo tenga un numero y no decimales
             segundos = '0' + Math.floor(this.audio.duration.toFixed(0) % 60)
         }
+
+        //Y lo añado al contexto
         this.p.textContent = `${minutos} : ${segundos}`
 
         this.barra_tiempo.insertAdjacentElement('afterend', this.p)
+
+        //Y lo mismo hago para el tiempo actual, si el tiempo actual es 0 pongo 0 : 00
         this.p2.id = 'tiempoactual'
 
         if (this.audio.currentTime == 0) {
@@ -219,13 +285,17 @@ class ReproductorMusica extends Contador {
         this.p2.textContent = '0 : 00'
         this.barra_tiempo.insertAdjacentElement('beforebegin', this.p2)
 
+        //Actualizo la bara de tiempo con la duracion máxima de la cancion, pero lo numero, no decimales, esto puede ser lo que haga
+        //que me quede un trozo muy pequeño cuando termina la cancion 
         this.barra_tiempo.max = this.audio.duration.toFixed(0)
     }
 
+    //Esta es la funcion que utilizo para poner en pause la música
     pause() {
         this.audio.pause()
     }
 
+    //Aquí es donde voy creando los numeros con el tiempo actualizado en cada segundo
     actualizartiempo() {
         if (this.audio.currentTime > 0) {
             let progreso = this.audio.currentTime
@@ -252,22 +322,33 @@ class ReproductorMusica extends Contador {
         }
     }
 
+    //Esta funcion la utilizo solo para obtener una cancion aleatoria de la pista
     otracancion() {
         getMusicList()
+            //Obtengo el json y lo trato
             .then((data) => {
+                //Calculo la longitud
                 let cant = data.Music.length
+                //Obtengo el array
                 let object = data.Music
+                //Creo una variable random dentro de la cantidad de canciones que hay
                 let v = Math.floor(Math.random() * cant)
+                //Mientras el id sea el mismo, o el de la anterior o posterior, se generan hasta que no coindice con uno de estos
                 while (this.Id === v || this.Id + 1 === v || this.Id - 1 === v) {
                     v = Math.floor(Math.random() * cant)
                 }
+
+                //Ahora creamos la nueva cancion ajustando los valores
                 this.p_titulo.textContent = object[v].Titulo
                 this.img.src = object[v].src_img
                 this.audio.src = object[v].src_audio
                 this.Id = object[v].Id
+
+                //Volvemos a restaurar los valores de la barra de tiempo
                 this.barra_tiempo.value = 0
                 this.barra_tiempo.max = 100
 
+                //Restauramos los valores de los minutos y segundos
                 this.p.textContent = '0 : 00'
                 this.p2.textContent = '0 : 00'
             })
@@ -279,16 +360,20 @@ class ReproductorMusica extends Contador {
         svg_play.classList.remove('none')
     }
 
+    //En esta funcion voy actualizando en tiempo real el tiempo de la canción
     actualizartiemposegundos() {
         let p2 = document.getElementById('tiempoactual')
         const minutos = Math.floor(this.audio.currentTime / 60)
         let segundos = Math.floor(this.audio.currentTime % 60)
-        if (segundos <= 10) {
+
+        //Añadimos un cero a la izquierda si es menos de 10
+        if (segundos < 10) {
             segundos = '0' + Math.floor(this.audio.currentTime % 60)
         }
         p2.textContent = `${minutos} : ${segundos}`
     }
 
+    //En esta funcion paramos el audio, lo ponemos 0, y además actualizamos el tiempo actual a 0, igual que la barra de progreso
     refrescarcancion() {
         this.refresh.addEventListener('click', () => {
             let svg_play = document.getElementById('play')
@@ -305,6 +390,7 @@ class ReproductorMusica extends Contador {
         })
     }
 
+    //Esta funcion es importante porque mira si el usuario quiero una cancion aleatorio o quiere seguir el curso de la pista de audio
     random() {
         if (this.Random === true) {
             this.Random = false
@@ -315,6 +401,7 @@ class ReproductorMusica extends Contador {
 
     }
 
+    //En esta funcion creamos la lista de canciones que tenemos en el json
     crearlista() {
         let div = document.getElementById('iconos')
         div.style.cssText = `
@@ -324,7 +411,11 @@ class ReproductorMusica extends Contador {
         getMusicList().then(data => {
             let cant = data.Music.length
             let listamusica = data.Music
+
+            //Hago esto porque no entiendo porque las canciones me las pone de la ultima hasta la primera, con esto invierto el orden
             for (let i = cant - 1; i >= 0; i--) {
+
+                //Voy creando divs 
                 let nuevo_div = document.createElement('div')
                 nuevo_div.style.cssText = `
                     color: var(--white);
@@ -334,49 +425,63 @@ class ReproductorMusica extends Contador {
                     font-family: var(--secondaryfont);
                     position: relative;
                     height: 2rem;
-                    `
+                `
+
                 let span = document.createElement('span')
                 span.id = 'svg'
                 span.innerHTML = svgplaymusiclist
                 nuevo_div.insertAdjacentElement('beforeend', span)
 
                 let p = document.createElement('p')
+                //Vamos metiendo el titulo de cada canción
                 p.textContent = listamusica[i].Titulo
                 p.id = 'titulo'
+
+                //Y los vamos insertando en la posicion que yo quiero
                 nuevo_div.insertAdjacentElement('afterbegin', p)
                 div.insertAdjacentElement('afterend', nuevo_div)
             }
         })
     }
 
+    //Esta funcion sirve para obtener la cancion siguiente a la que hay en la pista, que no sea aleatorio y siga el curso de la lista
     otracancionnoaleatoria(numero) {
         let nextcancion = 0
         getMusicList()
             .then((data) => {
                 this.cantSongs = data.Music.length
                 let object = data.Music
+
+                //Lo que hago con esto es recibir el objeto con el id de la cancion que hay actualmente para luego tratarlo
                 let objetorecibido = object.find(objectfound => objectfound.Id === this.Id)
 
+                //Le sumo o le resto 1 al id de la cancion actual
                 nextcancion = objetorecibido.Id + numero
 
+                //Si la cancion es mayor a la cantidad de canciones volvemos a empezar desde 0
                 if (nextcancion >= this.cantSongs) {
                     nextcancion = 0
                 }
 
+                //Se la cancion es menor que 0 empezamos por la ultima
                 if (nextcancion < 0) {
                     nextcancion = data.Music.length - 1
                 }
 
+                //Actualizamos el id de la clase
                 this.Id = nextcancion
 
+                //Volvemos a buscar el objeto de la siguiente cancion 
                 let objetoencontrado = object.find(objectfound => objectfound.Id == nextcancion)
 
+                //Actualizo los parámetros para poder reproducir la siguiente cancion 
                 this.p_titulo.textContent = objetoencontrado.Titulo
                 this.img.src = objetoencontrado.src_img
                 this.audio.src = objetoencontrado.src_audio
                 this.barra_tiempo.value = 0
                 this.barra_tiempo.max = 100
 
+                //Vuelvo a restrablecer los minutos y segundos
                 this.p.textContent = '0 : 00'
                 this.p2.textContent = '0 : 00'
             })
@@ -389,13 +494,16 @@ class ReproductorMusica extends Contador {
         svg_play.classList.remove('none')
     }
 
+    //Esta es la funcion que realmente cambia el volumen del audio
     cambiarvolumen(volumen) {
         this.audio.volume = volumen
     }
 }
 
+//Ahora empezamos con la clase del juego de cartas
 class CardGame extends Contador {
 
+    //Aquí declaro todos los atributos que voy a utilzar para poder crear correctamente el juego de memoria de cartas
     array_cartas = []
     tablero = document.querySelector('#tablerogrid')
     cartas_acertadas = 0
@@ -408,30 +516,35 @@ class CardGame extends Contador {
     intervalo_tiempo = null
     cant_puntos = 280
 
+    //En este constructor meto el objeto con el nombre de usuario y los puntos iniciales para luego ir haciendo comprobaciones
     constructor() {
         super()
         this.estilarTimer()
         localStorage.setItem("puntos", JSON.stringify({ nombreusuario: getCookie('Nombre'), puntos: 0 }))
     }
 
+    //Con esta funcion voy pintando las cartas
     pintarcartas() {
-
+        //Empiezo a correr el tiempo
         this.StartTimer()
 
+        //Obtengo las cartas del juego y creo los arrays para meter las cartas de manera aleatoria
         getCardList().then(json => {
 
             let array_primero = [0, 1, 2, 3, 4, 5, 6]
+            //Con esta funcion desordeno el array
             array_primero = array_primero.sort(function () { return Math.random() - 0.5 })
 
             let array_segundo = [0, 1, 2, 3, 4, 5, 6]
             array_segundo = array_segundo.sort(function () { return Math.random() - 0.5 })
 
-
+            //Llamo al metodo para generar las cartas
             this.generarcartas(array_primero, array_segundo, json)
 
         })
     }
 
+    //Con esto lo unico que hago es estilar un poco el timer para quedarlo bonito
     estilarTimer() {
         this.pttiempo.style.paddingBottom = '1rem'
         this.timer.style.color = 'var(--white)'
@@ -439,11 +552,12 @@ class CardGame extends Contador {
         this.timer.style.fontSize = 'large'
     }
 
+    //En esta funcion creo todas las cartas
     generarcartas(array_primero, array_segundo, json) {
 
         array_primero.forEach(number => {
 
-
+            //Creo los elemenos div y añadiendo las clases que tengo en el css
             let div = document.createElement('div')
             div.classList.add('flex-cc')
             div.style.backgroundColor = 'var(--white)'
@@ -452,12 +566,18 @@ class CardGame extends Contador {
             div.style.width = '13.7rem'
             div.style.height = '17rem'
             div.classList.add('cursor_pointer')
+
+            //Aquí meto el id de la carta porque luego lo voy a utilizar para comprobar las cartas
             div.id = json.Cartas[number].Id
+
+            //De primeras meto la imagen de la carta y no la oculta
             div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
 
+            //Los divs los añado al tablero
             this.tablero.append(div)
         })
 
+        //Hago lo mismo para el segundo array
         array_segundo.forEach(number => {
 
             let div = document.createElement('div')
@@ -474,6 +594,7 @@ class CardGame extends Contador {
             this.tablero.append(div)
         })
 
+        //Aquí llamo a empezar juego una vez que haya creado todas las cartas
         this.empezarjuego(json)
     }
 
@@ -495,18 +616,24 @@ class CardGame extends Contador {
     }
 
     Voltear(div, json) {
-        this.array_cartas.push(parseInt(div.id))
+        if(div.classList.contains('drop')){
+            alert('No haces nada pulsando en una carta adivinada')
+        }
+        else {
+            this.array_cartas.push(parseInt(div.id))
 
-        div.classList.remove('no_seleccionado')
-        div.classList.add('seleccionado')
-        div.classList.remove('rotate')
-        div.classList.add('rotate-reverse')
-
-        setTimeout(() => {
-            div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
-        }, 200)
-
-        this.comprobar()
+            div.classList.remove('no_seleccionado')
+            div.classList.add('seleccionado')
+            div.classList.remove('rotate')
+            div.classList.add('rotate-reverse')
+    
+            setTimeout(() => {
+                div.innerHTML = imgcard(json.Cartas[div.id].src, 100, 100)
+            }, 200)
+    
+            this.comprobar()
+        }
+        
     }
 
     comprobar() {
@@ -563,33 +690,21 @@ class CardGame extends Contador {
 
     Ganar() {
 
-        setTimeout(() => {
-            this.tablero.innerHTML = ''
+        alert('¡Has ganado, enhorabuena!')
+        this.reestablecertablero()
 
-            alert('¡Has ganado, enhorabuena!')
+        this.puntuacion = this.cant_puntos * 30
 
-            clearInterval(this.intervalo_tiempo)
-            this.segundos = 0
-            this.minutos = 0
+        let jsonEnLocalStorage = localStorage.getItem("puntos")
+        let json = JSON.parse(jsonEnLocalStorage)
 
-            this.timer.textContent = '0 : 00'
+        if (this.puntuacion > this.span_mj.textContent) {
+            this.span_mj.textContent = this.puntuacion
+            alert('¡Has obtenido record personal!')
 
-            this.puntuacion = this.cant_puntos * 30
-
-            let jsonEnLocalStorage = localStorage.getItem("puntos")
-            let json = JSON.parse(jsonEnLocalStorage)
-
-            if (this.puntuacion > this.span_mj.textContent) {
-                this.span_mj.textContent = this.puntuacion
-                alert('¡Has obtenido record personal!')
-
-            }
-            json.puntos = this.puntuacion
-            localStorage.setItem("puntos", JSON.stringify(json))
-
-        }, 400)
-
-        this.cartas_acertadas = 0
+        }
+        json.puntos = this.puntuacion
+        localStorage.setItem("puntos", JSON.stringify(json))
 
     }
 
@@ -600,7 +715,6 @@ class CardGame extends Contador {
             this.pttiempo.insertAdjacentElement('afterend', this.timer)
             this.cant_segundos--
             this.cant_puntos--
-            console.log(this.cant_segundos)
             if (this.cant_segundos == 0) {
                 this.Perder()
                 clearInterval(this.intervalo_tiempo)
@@ -610,20 +724,17 @@ class CardGame extends Contador {
     }
 
     Perder() {
-        this.tablero.innerHTML = ''
+        this.reestablecertablero()
         alert('¡Has perdido, vuelve a intentarlo!')
-
-        clearInterval(this.intervalo_tiempo)
-        this.segundos = 0
-        this.minutos = 0
-
-        this.timer.textContent = '0 : 00'
-
-        this.cartas_acertadas = 0
 
     }
 
     Play() {
+        this.reestablecertablero()
+        this.pintarcartas()
+    }
+
+    reestablecertablero(){
         this.tablero.innerHTML = ''
 
         clearInterval(this.intervalo_tiempo)
@@ -633,8 +744,9 @@ class CardGame extends Contador {
         this.timer.textContent = '0 : 00'
 
         this.cartas_acertadas = 0
-
-        this.pintarcartas()
+        this.cant_puntos = 200
+        this.puntuacion = 0
+        this.cant_segundos = 92
     }
 
 }
